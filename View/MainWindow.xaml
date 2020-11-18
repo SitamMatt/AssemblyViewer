@@ -10,9 +10,26 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
-    <Grid>
-        <TextBlock Text="{Binding Message}"/>
-        <TreeView Name="trvStructure" ItemsSource="{Binding Types}" Margin="10" TreeViewItem.Expanded="ItemExpanded">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Import">
+                    <MenuItem Header="_XML option " />
+                </MenuItem>
+                <MenuItem Header="_Export" >
+                    <MenuItem Header="_XML option" />
+                </MenuItem>
+                <MenuItem Header="_Close" />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="About">
+                <MenuItem Header="_Authors" />
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <TextBlock Text="{Binding Message}"/>
+            <!--<TreeView Name="trvStructure" ItemsSource="{Binding Types}" Margin="10,22,10,10" TreeViewItem.Expanded="ItemExpanded">
 
             <TreeView.ItemTemplate>
 
@@ -20,10 +37,14 @@
                     
                     <TextBlock Text="{Binding Name}" />
                 </HierarchicalDataTemplate>
-                <!--<DataTemplate DataType="{x:Type model:TypeInfo}">
+                -->
+            <!--<DataTemplate DataType="{x:Type model:TypeInfo}">
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>-->
+            <!--
             </TreeView.ItemTemplate>
-        </TreeView>
-    </Grid>
+        </TreeView>-->
+        </Grid>
+    </DockPanel>
+
 </Window>
