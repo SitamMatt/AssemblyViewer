@@ -6,7 +6,25 @@
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
         Title="NavigationWindow" Height="450" Width="800">
-    <Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Import">
+                    <MenuItem Header="_XML option " />
+                </MenuItem>
+                <MenuItem Header="_Export" >
+                    <MenuItem Header="_XML option" />
+                </MenuItem>
+                <MenuItem Header="_Close" />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="About">
+                <MenuItem Header="_Authors" />
+            </MenuItem>
+        </Menu>
+
         <Frame Source="MainPage.xaml"/>
-    </Grid>
+
+    </DockPanel>
 </Window>
