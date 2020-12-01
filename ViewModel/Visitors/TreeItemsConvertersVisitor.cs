@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Model.Data;
-using Model.Visitors;
+using Model.VisitorPattern;
 
 namespace ViewModel.Visitors
 {
@@ -37,7 +37,7 @@ namespace ViewModel.Visitors
             Result = col;
         }
 
-        public void Handle(MethodInfo assemblyInfo)
+        public void Handle(MethodInfo methodInfo)
         {
             throw new System.NotImplementedException();
         }
@@ -50,12 +50,12 @@ namespace ViewModel.Visitors
             Result = col;
         }
 
-        public void Handle(ConstructorInfo assemblyInfo)
+        public void Handle(ConstructorInfo constructorInfo)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Handle(PropertyInfo assemblyInfo)
+        public void Handle(PropertyInfo propertyInfo)
         {
             throw new System.NotImplementedException();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Model.Data;
+using Model.VisitorPattern;
 using FieldInfo = Model.Data.FieldInfo;
 using TypeInfo = Model.Data.TypeInfo;
 

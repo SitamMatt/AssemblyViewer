@@ -1,6 +1,4 @@
-﻿using Model.Visitors;
-
-namespace Model.Data
+﻿namespace Model.VisitorPattern
 {
     public interface IVisitable
     {

@@ -1,15 +1,15 @@
 ﻿using Model.Data;
 
-namespace Model.Visitors
+namespace Model.VisitorPattern
 {
     public interface IVisitor
     {
         void Handle(AssemblyInfo assemblyInfo);
         void Handle(TypeInfo typeInfo);
-        void Handle(MethodInfo assemblyInfo);
+        void Handle(MethodInfo methodInfo);
         void Handle(FieldInfo fieldInfo);
-        void Handle(ConstructorInfo assemblyInfo);
-        void Handle(PropertyInfo assemblyInfo);
+        void Handle(ConstructorInfo constructorInfo);
+        void Handle(PropertyInfo propertyInfo);
         void Handle(ModuleInfo moduleInfo);
     }
 }

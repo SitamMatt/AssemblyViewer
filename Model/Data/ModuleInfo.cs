@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Model.Visitors;
+using Model.VisitorPattern;
 
 namespace Model.Data
 {
