@@ -2,13 +2,13 @@
 using System.Collections.ObjectModel;
 using Model.Data;
 using Model.VisitorPattern;
+using ViewModel.Data;
 
 namespace ViewModel.Visitors
 {
-    public class TreeConverterVisitor : IVisitor
+    public class TreeConverterVisitor : ITreeConverterVisitor
     {
         protected TreeNode DummyTreeNode = new TreeNode {Name = "Dummy"};
-        public TreeNode Result { get; private set; }
 
         protected TreeNode createBasicNode(AsmComponent component)
         {
@@ -18,20 +18,20 @@ namespace ViewModel.Visitors
         public void Handle(AssemblyInfo assemblyInfo)
         {
             var result = createBasicNode(assemblyInfo);
-            if (assemblyInfo.Modules.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
+            if (assemblyInfo.Modules != null && assemblyInfo.Modules.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
             Result = result;
         }
 
         public void Handle(TypeInfo typeInfo)
         {
             var result = createBasicNode(typeInfo);
-            if(typeInfo.Fields.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
+            if(typeInfo.Fields != null && typeInfo.Fields.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
             Result = result;
         }
 
         public void Handle(MethodInfo methodInfo)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Handle(FieldInfo fieldInfo)
@@ -43,24 +43,26 @@ namespace ViewModel.Visitors
 
         public void Handle(ConstructorInfo constructorInfo)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Handle(ParameterInfo parameterInfo)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Handle(PropertyInfo propertyInfo)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Handle(ModuleInfo moduleInfo)
         {
             var result = createBasicNode(moduleInfo);
-            if(moduleInfo.Types.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
+            if(moduleInfo.Types != null && moduleInfo.Types.Count != 0) result.Children = new ObservableCollection<TreeNode> {DummyTreeNode};
             Result = result;
         }
+
+        public TreeNode Result { get; set; }
     }
 }

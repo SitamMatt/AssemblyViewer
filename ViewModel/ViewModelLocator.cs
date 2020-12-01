@@ -1,6 +1,7 @@
 ﻿using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
 using Model.Services;
+using ViewModel.Visitors;
 
 namespace ViewModel
 {
@@ -10,6 +11,8 @@ namespace ViewModel
         {
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
+            SimpleIoc.Default.Register<ITreeConverterVisitor, TreeConverterVisitor>();
+            SimpleIoc.Default.Register<ITreeItemsConverterVisitor, TreeItemsConvertersVisitor>();
             SimpleIoc.Default.Register<MenuViewModel>();
         }
 

@@ -1,20 +1,21 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System;
+using System.Collections.ObjectModel;
 using Model.Data;
-using Model.VisitorPattern;
+using ViewModel.Data;
 
 namespace ViewModel.Visitors
 {
-    public class TreeItemsConvertersVisitor : IVisitor
+    public class TreeItemsConvertersVisitor : ITreeItemsConverterVisitor
     {
-        private TreeConverterVisitor _treeItemConverter;
+        private readonly ITreeConverterVisitor _treeItemConverter;
 
-        public TreeItemsConvertersVisitor(TreeConverterVisitor treeItemConverter)
+        public TreeItemsConvertersVisitor(ITreeConverterVisitor treeItemConverter)
         {
             _treeItemConverter = treeItemConverter;
         }
 
         public ObservableCollection<TreeNode> Result { get; set; }
+
         public void Handle(AssemblyInfo assemblyInfo)
         {
             var col = new ObservableCollection<TreeNode>();
@@ -23,6 +24,7 @@ namespace ViewModel.Visitors
                 moduleInfo.Accept(_treeItemConverter);
                 col.Add(_treeItemConverter.Result);
             }
+
             Result = col;
         }
 
@@ -34,12 +36,12 @@ namespace ViewModel.Visitors
                 moduleInfo.Accept(_treeItemConverter);
                 col.Add(_treeItemConverter.Result);
             }
+
             Result = col;
         }
 
         public void Handle(MethodInfo methodInfo)
         {
-            throw new System.NotImplementedException();
         }
 
         public void Handle(FieldInfo fieldInfo)
@@ -52,17 +54,14 @@ namespace ViewModel.Visitors
 
         public void Handle(ConstructorInfo constructorInfo)
         {
-            throw new System.NotImplementedException();
         }
 
         public void Handle(ParameterInfo parameterInfo)
         {
-            throw new System.NotImplementedException();
         }
 
         public void Handle(PropertyInfo propertyInfo)
         {
-            throw new System.NotImplementedException();
         }
 
         public void Handle(ModuleInfo moduleInfo)
@@ -73,6 +72,7 @@ namespace ViewModel.Visitors
                 typeInfo.Accept(_treeItemConverter);
                 col.Add(_treeItemConverter.Result);
             }
+
             Result = col;
         }
     }

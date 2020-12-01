@@ -5,7 +5,7 @@ namespace Tester
 {
     public class Program
     {
-        public int elo;
+        public int prop;
         
         static void Main(string[] args)
         {
