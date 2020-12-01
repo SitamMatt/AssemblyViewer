@@ -1,63 +1,58 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Common.Extensions;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Model.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Model.Services;
+using ViewModel.Visitors;
 
 namespace ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private TypeInfo STR = new("STRING");
-        private TypeInfo INT = new TypeInfo("INT");
+        private readonly IAssemblyInfoService _assemblyInfoService;
+        private readonly TreeItemsConvertersVisitor _childrenConverter;
 
-        private List<TypeInfo> _types = new List<TypeInfo>()
-        {
-            new ("STRING") {
-            SubTypes = new List<TypeInfo>(){
-                dummyTypeInfo
-            }
-            },
-            new ("INT") {
-            SubTypes = new List<TypeInfo>(){
-                dummyTypeInfo
-            }
-            }
-        };
+        private readonly List<TreeNode> _nodesList;
 
-        public RelayCommand<TypeInfo> ExpandCommand
+        private ObservableCollection<TreeNode> _root;
+
+        public MainViewModel(IAssemblyInfoService assemblyInfoService)
         {
-            get;
-            private set;
+            _assemblyInfoService = assemblyInfoService;
+            var converter = new TreeConverterVisitor();
+            _childrenConverter = new TreeItemsConvertersVisitor(converter);
+            _assemblyInfoService.AcceptRoot(converter);
+            Root = new ObservableCollection<TreeNode>
+            {
+                converter.Result
+            };
+            _nodesList = new List<TreeNode>
+            {
+                converter.Result
+            };
+            ExpandCommand = new RelayCommand<TreeNode>(ExecuteExpandCommand, param => true);
         }
 
-        private static readonly TypeInfo dummyTypeInfo = new("DUMMY");
-        public MainViewModel()
+        public ObservableCollection<TreeNode> Root
         {
-            STR.SubTypes.Add(INT);
-            INT.SubTypes.Add(STR);
-            ExpandCommand = new RelayCommand<TypeInfo>(param=>ExecuteExpandCommand(param), param => true);
-        }
-
-        private void ExecuteExpandCommand(TypeInfo typeName)
-        {
-
-            var index = typeName.Name != "STRING" ? STR : INT;
-            typeName.SubTypes.Clear();
-            typeName.SubTypes.Add(index with { SubTypes = new List<TypeInfo> { dummyTypeInfo } });
-        }
-
-        public List<TypeInfo> Types
-        {
-            get => _types;
+            get => _root;
             set
             {
-                _types = value;
-                RaisePropertyChanged(nameof(Types));
+                _root = value;
+                RaisePropertyChanged(nameof(Root));
             }
+        }
+
+        public RelayCommand<TreeNode> ExpandCommand { get; }
+
+        private void ExecuteExpandCommand(TreeNode node)
+        {
+            if (!_nodesList.Contains(node)) return;
+            _assemblyInfoService.Accept(node.Hash, _childrenConverter);
+            node.Children.Clear();
+            node.Children.AddRange(_childrenConverter.Result);
+            _nodesList.AddRange(_childrenConverter.Result);
         }
     }
 }

@@ -7,22 +7,19 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:model="clr-namespace:Model.Data;assembly=Model"
+      xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
       Title="MainPage"
       DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
 
     <Grid>
         <TextBlock Text="{Binding Message}"/>
-        <TreeView Name="trvStructure" ItemsSource="{Binding Types}" Margin="10" TreeViewItem.Expanded="ItemExpanded">
+        <TreeView Name="trvStructure" ItemsSource="{Binding Root}" Margin="10" TreeViewItem.Expanded="ItemExpanded">
 
             <TreeView.ItemTemplate>
 
-                <HierarchicalDataTemplate DataType="{x:Type model:TypeInfo}" ItemsSource="{Binding SubTypes}">
-
-                    <TextBlock Text="{Binding Name}" />
+                <HierarchicalDataTemplate DataType="{x:Type viewModel:TreeNode}" ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}"></TextBlock>
                 </HierarchicalDataTemplate>
-                <!--<DataTemplate DataType="{x:Type model:TypeInfo}">
-                    <TextBlock Text="{Binding Name}" />
-                </DataTemplate>-->
             </TreeView.ItemTemplate>
         </TreeView>
     </Grid>

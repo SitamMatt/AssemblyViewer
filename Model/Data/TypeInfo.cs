@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Model.Visitors;
 
 namespace Model.Data
 {
-    public record TypeInfo(string Name)
+    public class TypeInfo : AsmComponent
     {
-        public List<TypeInfo> SubTypes { get; set; } = new List<TypeInfo>();
+        public TypeAttributes Attributes { get; set; }
+        public List<FieldInfo> Fields { get; set; }
+        public List<ConstructorInfo> Constructors { get; set; }
+        public List<MethodInfo> Methods { get; set; }
+        public List<PropertyInfo> Properties { get; set; }
+        public List<TypeInfo> NestedTypes { get; set; }
+        public override void Accept(IVisitor visitor)
+        {
+            visitor.Handle(this);
+        }
     }
 }
