@@ -10,6 +10,7 @@ namespace ViewModel
         {
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
+            SimpleIoc.Default.Register<MenuViewModel>();
         }
 
         public MainViewModel MainViewModel
@@ -17,5 +18,9 @@ namespace ViewModel
             get => SimpleIoc.Default.GetInstance<MainViewModel>();
         }
 
+        public MenuViewModel MenuViewModel
+        {
+            get => SimpleIoc.Default.GetInstance<MenuViewModel>();
+        }
     }
 }

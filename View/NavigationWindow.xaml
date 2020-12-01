@@ -7,17 +7,17 @@
         mc:Ignorable="d"
         Title="NavigationWindow" Height="450" Width="800">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel, Source={StaticResource Locator}}">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open"/>
+                <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
                 <MenuItem Header="_Import">
                     <MenuItem Header="_XML option " />
                 </MenuItem>
                 <MenuItem Header="_Export" >
                     <MenuItem Header="_XML option" />
                 </MenuItem>
-                <MenuItem Header="_Close" />
-                <MenuItem Header="_Exit" />
+                <MenuItem Header="_Close" Command="{Binding CloseCommand}"/>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="About">
                 <MenuItem Header="_Authors" />
