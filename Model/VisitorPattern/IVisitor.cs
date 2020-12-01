@@ -9,6 +9,7 @@ namespace Model.VisitorPattern
         void Handle(MethodInfo methodInfo);
         void Handle(FieldInfo fieldInfo);
         void Handle(ConstructorInfo constructorInfo);
+        void Handle(ParameterInfo parameterInfo);
         void Handle(PropertyInfo propertyInfo);
         void Handle(ModuleInfo moduleInfo);
     }

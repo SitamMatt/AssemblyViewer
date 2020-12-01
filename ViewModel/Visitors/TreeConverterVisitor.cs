@@ -46,6 +46,11 @@ namespace ViewModel.Visitors
             throw new NotImplementedException();
         }
 
+        public void Handle(ParameterInfo parameterInfo)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Handle(PropertyInfo propertyInfo)
         {
             throw new NotImplementedException();
