@@ -1,5 +1,6 @@
 ﻿using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
+using Model.Services;
 
 namespace ViewModel
 {
@@ -8,6 +9,7 @@ namespace ViewModel
         public ViewModelLocator()
         {
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
             SimpleIoc.Default.Register<MenuViewModel>();
         }
 
@@ -20,6 +22,5 @@ namespace ViewModel
         {
             get => SimpleIoc.Default.GetInstance<MenuViewModel>();
         }
-
     }
 }

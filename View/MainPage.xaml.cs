@@ -25,12 +25,13 @@ namespace View
         public MainPage()
         {
             InitializeComponent();
+            var rlo = this.trvStructure.Items;
         }
 
         private void ItemExpanded(object sender, RoutedEventArgs e)
         {
             var item = e.OriginalSource as TreeViewItem;
-            var param = (item.DataContext as TypeInfo);
+            var param = (item.DataContext as TreeNode);
             var vm = DataContext as MainViewModel;
             if (vm?.ExpandCommand.CanExecute(param) ?? false)
             {
