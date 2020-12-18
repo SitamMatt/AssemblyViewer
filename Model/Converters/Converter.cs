@@ -13,7 +13,7 @@ namespace Model.Converters
     {
         protected AssemblyInfo _assemblyInfo;
         protected Dictionary<string, TypeInfo> _typesLookup = new Dictionary<string, TypeInfo>();
-        public Dictionary<int, IVisitable> NodesLookup { get; set; } = new Dictionary<int, IVisitable>();
+        public Dictionary<int, AsmComponent> NodesLookup { get; set; } = new Dictionary<int, AsmComponent>();
 
         public AssemblyInfo Convert(Assembly assembly)
         {
@@ -23,6 +23,7 @@ namespace Model.Converters
                 Modules = assembly.Modules.Select(ConvertModule).ToList()
             };
             NodesLookup[_assemblyInfo.GetHashCode()] = _assemblyInfo;
+            _assemblyInfo.Lookup = NodesLookup;
             return _assemblyInfo;
         }
 

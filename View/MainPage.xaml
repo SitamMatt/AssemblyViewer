@@ -9,8 +9,8 @@
       xmlns:model="clr-namespace:Model.Data;assembly=Model"
       xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
       Title="MainPage"
-      DataContext="{Binding MainViewModel, Source={StaticResource Locator}}">
-
+      >
+    <!-- DataContext="{Binding MainViewModel, Source={StaticResource Locator}}" -->
     <Grid>
         <TextBlock Text="{Binding Message}"/>
         <TreeView Name="trvStructure" ItemsSource="{Binding Root}" Margin="10" TreeViewItem.Expanded="ItemExpanded">

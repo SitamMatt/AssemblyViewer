@@ -3,28 +3,44 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
+        xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
         Title="NavigationWindow" Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel, Source={StaticResource Locator}}">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="_Open" Command="{Binding OpenCommand}" />
                 <MenuItem Header="_Import">
                     <MenuItem Header="_XML option " />
                 </MenuItem>
-                <MenuItem Header="_Export" >
+                <MenuItem Header="_Export">
                     <MenuItem Header="_XML option" />
                 </MenuItem>
-                <MenuItem Header="_Close" Command="{Binding CloseCommand}"/>
+                <MenuItem Header="_Close" Command="{Binding CloseCommand}" />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="About">
                 <MenuItem Header="_Authors" />
             </MenuItem>
         </Menu>
-
-        <Frame Source="MainPage.xaml"/>
+        <TabControl DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
+                    ItemsSource="{Binding Tabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Root[0].Name}"></TextBlock>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Frame>
+                        <Frame.Content>
+                            <!-- todo convert to control -->
+                            <view:MainPage DataContext="{Binding }"/>
+                        </Frame.Content>
+                    </Frame>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
 
     </DockPanel>
 </Window>
