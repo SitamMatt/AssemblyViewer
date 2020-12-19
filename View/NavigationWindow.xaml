@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
+
         Title="NavigationWindow" Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel, Source={StaticResource Locator}}">
@@ -31,13 +33,14 @@
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <Frame>
-                        <Frame.Content>
-                            <!-- todo convert to control -->
-                            <view:MainPage DataContext="{Binding }"/>
-                        </Frame.Content>
-                    </Frame>
+                <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
+                    <view:AssemblyView DataContext="{Binding}"/>
+                    <!-- <Frame> -->
+                    <!--     <Frame.Content> -->
+                    <!--         ~1~ todo convert to control @1@ -->
+                    <!--         <view:MainPage DataContext="{Binding }"/> -->
+                    <!--     </Frame.Content> -->
+                    <!-- </Frame> -->
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
