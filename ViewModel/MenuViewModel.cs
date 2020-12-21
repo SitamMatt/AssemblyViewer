@@ -30,9 +30,9 @@ namespace ViewModel
             private set;
         }
 
-        public void ExitCommandExecute()
+        protected void ExitCommandExecute()
         {
-            Environment.Exit(0);
+            
         }
 
         public RelayCommand OpenCommand
@@ -41,7 +41,7 @@ namespace ViewModel
             private set;
         }
 
-        public void OpenCommandExecute()
+        protected void OpenCommandExecute()
         {
             var filename = _ioService.OpenFileDialog();
             _projectService.OpenDll(filename);
@@ -53,7 +53,7 @@ namespace ViewModel
             private set;
         }
 
-        public void CloseCommandExecute()
+        protected void CloseCommandExecute()
         {
             
         }

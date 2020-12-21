@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace ViewModel
+namespace ViewModel.Data
 {
     public class TreeNode
     {
