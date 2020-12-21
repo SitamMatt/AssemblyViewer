@@ -7,5 +7,6 @@ namespace Model.Services
     {
         void OpenDll(string path);
         ObservableCollection<Project> Projects { get; }
+        void CloseProject(string projectName);
     }
 }

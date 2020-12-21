@@ -8,7 +8,6 @@
              xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock Text="{Binding Message}"/>
         <TreeView Name="TrvStructure" ItemsSource="{Binding Root}" Margin="10" TreeViewItem.Expanded="ItemExpanded">
 
             <TreeView.ItemTemplate>

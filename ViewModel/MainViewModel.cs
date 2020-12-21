@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Common.Extensions;
 using GalaSoft.MvvmLight;
@@ -33,6 +34,8 @@ namespace ViewModel
             };
             ExpandCommand = new RelayCommand<TreeNode>(ExecuteExpandCommand, param => true);
         }
+
+        public string Name => Root[0].Name;
 
         public ObservableCollection<TreeNode> Root
         {

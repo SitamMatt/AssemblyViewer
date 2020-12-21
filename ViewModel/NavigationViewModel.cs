@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Model.Services;
 using Model.Services.Data;
 using Tester;
@@ -13,6 +15,7 @@ namespace ViewModel
     {
         private readonly IProjectsService _projectService;
         private readonly IAssemblyInfoServiceCreator _assemblyInfoServiceCreator;
+        private MainViewModel _activeVm;
 
         public NavigationViewModel(IProjectsService projectsService, IAssemblyInfoServiceCreator assemblyInfoServiceCreator)
         {
@@ -20,6 +23,17 @@ namespace ViewModel
             _assemblyInfoServiceCreator = assemblyInfoServiceCreator;
             _projectService.Projects.CollectionChanged += ProjectsOnCollectionChanged;
             Tabs = new ObservableCollection<MainViewModel>();
+            CloseTabCommand = new RelayCommand<Object>(ExecuteCloseTabCommand, CanExecuteCloseTabCommand);
+        }
+
+        private void ExecuteCloseTabCommand(Object projectName)
+        {
+            _projectService.CloseProject(_activeVm.Name);
+        }
+
+        private bool CanExecuteCloseTabCommand(Object arg)
+        {
+            return true;
         }
 
         private void ProjectsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -33,5 +47,17 @@ namespace ViewModel
         }
 
         public ObservableCollection<MainViewModel> Tabs { get; set; }
+        
+        public RelayCommand<Object> CloseTabCommand { get; }
+
+        public MainViewModel ActiveVM
+        {
+            get => _activeVm;
+            set
+            {
+                _activeVm = value;
+                RaisePropertyChanged(nameof(ActiveVM));
+            }
+        }
     }
 }

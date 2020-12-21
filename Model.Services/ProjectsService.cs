@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using Model.Converters;
 using Model.Services.Data;
@@ -8,13 +9,18 @@ namespace Model.Services
 {
     public class ProjectsService : IProjectsService
     {
-        private ObservableCollection<Project> _projects;
+        public ObservableCollection<Project> Projects { get; }
 
-        public ObservableCollection<Project> Projects => _projects;
+        public void CloseProject(string projectName)
+        {
+            Projects.Remove(
+                Projects
+                    .FirstOrDefault(x => x.Name == projectName));
+        }
 
         public ProjectsService()
         {
-            _projects = new ObservableCollection<Project>();
+            Projects = new ObservableCollection<Project>();
         }
 
         public void OpenDll(string path)
@@ -29,7 +35,7 @@ namespace Model.Services
                 Guid = System.Guid.NewGuid(),
                 AssemblyInfo = asmInfo
             };
-            _projects.Add(project);
+            Projects.Add(project);
         }
     }
 }

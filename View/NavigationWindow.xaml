@@ -6,6 +6,7 @@
         xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
         xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
 
         Title="NavigationWindow" Height="450" Width="800">
     <DockPanel>
@@ -25,25 +26,24 @@
                 <MenuItem Header="_Authors" />
             </MenuItem>
         </Menu>
-        <TabControl DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
-                    ItemsSource="{Binding Tabs}">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Root[0].Name}"></TextBlock>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
+        <DockingManager DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
+                        DocumentsSource="{Binding Tabs}"
+                        ActiveContent="{Binding ActiveVM, Mode=TwoWay}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="DocumentClosing">
+                    <b:InvokeCommandAction Command="{Binding CloseTabCommand}" CommandParameter="{Binding Content}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+            <DockingManager.Resources>
                 <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
-                    <view:AssemblyView DataContext="{Binding}"/>
-                    <!-- <Frame> -->
-                    <!--     <Frame.Content> -->
-                    <!--         ~1~ todo convert to control @1@ -->
-                    <!--         <view:MainPage DataContext="{Binding }"/> -->
-                    <!--     </Frame.Content> -->
-                    <!-- </Frame> -->
+                    <view:AssemblyView DataContext="{Binding}" />
                 </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
-
+            </DockingManager.Resources>
+            <DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Content.Name}" />
+                </DataTemplate>
+            </DockingManager.DocumentHeaderTemplate>
+        </DockingManager>
     </DockPanel>
 </Window>
