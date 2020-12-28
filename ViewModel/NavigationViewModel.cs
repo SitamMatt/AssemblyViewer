@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Model.Services;
+using GalaSoft.MvvmLight.Ioc;
 using Model.Services.Data;
+using Model.Services.Interfaces;
 using Tester;
+using ViewModel.Data;
+using ViewModel.Visitors;
 
 namespace ViewModel
 {
@@ -42,7 +46,11 @@ namespace ViewModel
             foreach (var newItem in e.NewItems)
             {
                 if (newItem is Project project)
-                    Tabs.Add(new MainViewModel(_assemblyInfoServiceCreator.Create(project.AssemblyInfo)));
+                    Tabs.Add(new MainViewModel(
+                        _assemblyInfoServiceCreator.Create(project.AssemblyInfo),
+                        SimpleIoc.Default.GetInstance<ITreeConverterVisitor>(),
+                        SimpleIoc.Default.GetInstance<ITreeItemsConverterVisitor>()
+                    ));
             }
         }
 

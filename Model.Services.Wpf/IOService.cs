@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using Model.Services.Interfaces;
 
 namespace Model.Services.Wpf
 {

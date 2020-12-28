@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Model.Converters;
 using Model.Services.Data;
+using Model.Services.Interfaces;
 
 namespace Model.Services
 {
@@ -32,10 +34,24 @@ namespace Model.Services
             var project = new Project
             {
                 Name = asmInfo.Name,
-                Guid = System.Guid.NewGuid(),
+                Guid = Guid.NewGuid(),
                 AssemblyInfo = asmInfo
             };
             Projects.Add(project);
         }
+
+        public void Export(Guid projectGuid, IAssemblyExporter exporter)
+        {
+            //var project = Projects.FirstOrDefault(x => x.Guid == projectGuid);
+            var project = Projects.FirstOrDefault();
+            if(project == null)
+            {
+                // ex
+            }
+            //TODO : export project instead of AssemblyInfo
+            exporter.Export(project.AssemblyInfo);
+        }
+
+        
     }
 }

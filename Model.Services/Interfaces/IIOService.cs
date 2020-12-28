@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Model.Services
+namespace Model.Services.Interfaces
 {
     public interface IIoService
     {

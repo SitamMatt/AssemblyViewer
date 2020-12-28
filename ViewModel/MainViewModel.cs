@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Documents;
 using Common.Extensions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Model.Services;
+using Model.Services.Interfaces;
 using ViewModel.Data;
 using ViewModel.Visitors;
 

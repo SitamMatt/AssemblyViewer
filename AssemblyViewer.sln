@@ -9,15 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel", "ViewModel\View
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{EF6DDE0A-759A-4370-9952-3FF4A8F776C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{6769AFE9-8A55-4B00-ADBF-458B4AC4FE0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tester", "Tester\Tester.csproj", "{6769AFE9-8A55-4B00-ADBF-458B4AC4FE0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{E33AF0D3-6B49-498A-8B01-1C81F33806FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{E33AF0D3-6B49-498A-8B01-1C81F33806FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Services", "Model.Services\Model.Services.csproj", "{A642841D-7CD3-47FC-B427-563947B4789A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Services", "Model.Services\Model.Services.csproj", "{A642841D-7CD3-47FC-B427-563947B4789A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModel.Tests", "ViewModel.Tests\ViewModel.Tests.csproj", "{E58F990E-091D-4DE0-B9BD-CD0B2E61E81A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewModel.Tests", "ViewModel.Tests\ViewModel.Tests.csproj", "{E58F990E-091D-4DE0-B9BD-CD0B2E61E81A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model.Services.Wpf", "Model.Services.Wpf\Model.Services.Wpf.csproj", "{E9396513-502A-4DA2-A36F-8261A5D7C8A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model.Services.Wpf", "Model.Services.Wpf\Model.Services.Wpf.csproj", "{E9396513-502A-4DA2-A36F-8261A5D7C8A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

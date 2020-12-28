@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Model.Data;
 using ViewModel;
+using ViewModel.Data;
 
 namespace View
 {
@@ -11,6 +13,8 @@ namespace View
             InitializeComponent();
         }
         
+        
+        public AssemblyInfo Asm { get; set; }
         private void ItemExpanded(object sender, RoutedEventArgs e)
         {
             var item = e.OriginalSource as TreeViewItem;
