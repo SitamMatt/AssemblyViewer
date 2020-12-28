@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Model.Converters;
 using Model.Data;
+using Model.Services.Interfaces;
 using Model.VisitorPattern;
 using Tester;
 
@@ -9,13 +10,13 @@ namespace Model.Services
     public class AssemblyInfoService : IAssemblyInfoService
     {
         private readonly AssemblyInfo _assemblyInfo;
-        private readonly Dictionary<int, IVisitable> _lookup;
 
-        public AssemblyInfoService()
+        public AssemblyInfoService(AssemblyInfo info)
         {
-            var c = new Converter();
-            _assemblyInfo = c.Convert(typeof(Program).Assembly);
-            _lookup = c.NodesLookup;
+            _assemblyInfo = info;
+            // var c = new Converter();
+            // _assemblyInfo = c.Convert(typeof(Program).Assembly);
+            // _lookup = c.NodesLookup;
         }
 
         public void AcceptRoot(IVisitor visitor)
@@ -25,7 +26,7 @@ namespace Model.Services
 
         public void Accept(int key, IVisitor visitor)
         {
-            _lookup[key].Accept(visitor);
+            _assemblyInfo.Lookup[key].Accept(visitor);
         }
     }
 }

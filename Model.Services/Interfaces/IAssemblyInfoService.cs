@@ -1,6 +1,6 @@
 ﻿using Model.VisitorPattern;
 
-namespace Model.Services
+namespace Model.Services.Interfaces
 {
     public interface IAssemblyInfoService
     {

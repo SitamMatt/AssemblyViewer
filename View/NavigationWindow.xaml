@@ -3,28 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
+        xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
+
         Title="NavigationWindow" Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top" DataContext="{Binding MenuViewModel, Source={StaticResource Locator}}">
             <MenuItem Header="_File">
-                <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="_Open" Command="{Binding OpenCommand}" />
                 <MenuItem Header="_Import">
                     <MenuItem Header="_XML option " />
                 </MenuItem>
-                <MenuItem Header="_Export" >
-                    <MenuItem Header="_XML option" />
+                <MenuItem Header="_Export">
+                    <MenuItem Header="_XML option" Command="{Binding ExportXmlCommand}"/>
                 </MenuItem>
-                <MenuItem Header="_Close" Command="{Binding CloseCommand}"/>
+                <MenuItem Header="_Close" Command="{Binding CloseCommand}" />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
             </MenuItem>
             <MenuItem Header="About">
                 <MenuItem Header="_Authors" />
             </MenuItem>
         </Menu>
-
-        <Frame Source="MainPage.xaml"/>
-
+        <DockingManager DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
+                        DocumentsSource="{Binding Tabs}"
+                        ActiveContent="{Binding ActiveVM, Mode=TwoWay}">
+            <!-- <b:Interaction.Triggers> -->
+            <!--     <b:EventTrigger EventName="DocumentClosing"> -->
+            <!--         <b:InvokeCommandAction Command="{Binding CloseTabCommand}" CommandParameter="{Binding Content}" /> -->
+            <!--     </b:EventTrigger> -->
+            <!-- </b:Interaction.Triggers> -->
+            <DockingManager.Resources>
+                <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
+                    <view:AssemblyView DataContext="{Binding }" />
+                </DataTemplate>
+            </DockingManager.Resources>
+            <DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Content.Name}" />
+                </DataTemplate>
+            </DockingManager.DocumentHeaderTemplate>
+        </DockingManager>
     </DockPanel>
 </Window>
