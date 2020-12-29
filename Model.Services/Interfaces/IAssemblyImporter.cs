@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Model.Services.Interfaces
 {
-    interface IAssemblyImporter
+    public interface IAssemblyImporter
     {
         AssemblyInfo Import();
     }

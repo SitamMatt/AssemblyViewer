@@ -10,5 +10,6 @@ namespace Model.Services.Interfaces
         ObservableCollection<Project> Projects { get; }
         void CloseProject(string projectName);
         void Export(Guid projectGuid, IAssemblyExporter exporter);
+        void Import(IAssemblyImporter importer);
     }
 }

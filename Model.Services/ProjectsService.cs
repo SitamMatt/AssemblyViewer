@@ -52,6 +52,18 @@ namespace Model.Services
             exporter.Export(project.AssemblyInfo);
         }
 
+        public void Import(IAssemblyImporter importer)
+        {
+            var info = importer.Import();
+            var project = new Project
+            {
+                Name = info.Name,
+                Guid = Guid.NewGuid(),
+                AssemblyInfo = info
+            };
+            Projects.Add(project);
+        }
+
         
     }
 }

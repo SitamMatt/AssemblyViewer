@@ -23,6 +23,7 @@ namespace ViewModel
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
             CloseCommand = new RelayCommand(CloseCommandExecute, () => true);
             ExportXmlCommand = new RelayCommand(ExportXmlCommandExecute, () => true);
+            ImportXmlCommand = new RelayCommand(ImportXmlCommandExecute, () => true);
         }
 
         public RelayCommand ExitCommand
@@ -81,7 +82,9 @@ namespace ViewModel
 
         protected void ImportXmlCommandExecute()
         {
-
+            var filename = _ioService.OpenFileDialog();
+            if (filename == null) return;
+            _projectService.Import(new XmlAssemblyImporter(filename));
         }
     }
 }

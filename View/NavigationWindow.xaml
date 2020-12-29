@@ -13,10 +13,10 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_Open" Command="{Binding OpenCommand}" />
                 <MenuItem Header="_Import">
-                    <MenuItem Header="_XML option " />
+                    <MenuItem Header="_XML " Command="{Binding ImportXmlCommand}"/>
                 </MenuItem>
                 <MenuItem Header="_Export">
-                    <MenuItem Header="_XML option" Command="{Binding ExportXmlCommand}"/>
+                    <MenuItem Header="_XML" Command="{Binding ExportXmlCommand}"/>
                 </MenuItem>
                 <MenuItem Header="_Close" Command="{Binding CloseCommand}" />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
