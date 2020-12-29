@@ -28,7 +28,7 @@ namespace Model.Services
                 .Create();
             using (var fs = File.Open(_path, FileMode.Open))
             {
-                return serializer.Deserialize<AssemblyInfo>(_path);
+                return serializer.Deserialize<AssemblyInfo>(fs);
             }
         }
     }
