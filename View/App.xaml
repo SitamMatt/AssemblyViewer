@@ -5,6 +5,6 @@
              StartupUri="NavigationWindow.xaml"
              xmlns:vm="clr-namespace:ViewModel;assembly=ViewModel">
     <Application.Resources>
-        <vm:ViewModelLocator x:Key="Locator"/>
+        <local:ViewModelLocator x:Key="Locator"/>
     </Application.Resources>
 </Application>

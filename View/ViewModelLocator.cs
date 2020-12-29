@@ -5,8 +5,9 @@ using ViewModel.Visitors;
 using Model.Services.Data;
 using Model.Services.Wpf;
 using Model.Services.Interfaces;
+using ViewModel;
 
-namespace ViewModel
+namespace View
 {
     public class ViewModelLocator
     {
@@ -32,7 +33,7 @@ namespace ViewModel
         {
             get => SimpleIoc.Default.GetInstance<MenuViewModel>();
         }
-        
+
         public NavigationViewModel NavigationViewModel
         {
             get => SimpleIoc.Default.GetInstance<NavigationViewModel>();
