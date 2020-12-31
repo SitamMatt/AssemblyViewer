@@ -17,10 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Model.Services.Wpf\Model.Services.Wpf.csproj" />
     <ProjectReference Include="..\Model.Services\Model.Services.csproj" />
-    <ProjectReference Include="..\Model\Model.csproj" />
-    <ProjectReference Include="..\Tester\Tester.csproj" />
   </ItemGroup>
 
 </Project>

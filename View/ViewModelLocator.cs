@@ -1,9 +1,7 @@
-﻿using CommonServiceLocator;
-using GalaSoft.MvvmLight.Ioc;
+﻿using GalaSoft.MvvmLight.Ioc;
 using Model.Services;
 using ViewModel.Visitors;
 using Model.Services.Data;
-using Model.Services.Wpf;
 using Model.Services.Interfaces;
 using ViewModel;
 using MvvmDialogs;
@@ -23,7 +21,6 @@ namespace View
             // services
             SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
             SimpleIoc.Default.Register<IProjectsService, ProjectsService>();
-            SimpleIoc.Default.Register<IIoService, IOService>();
             SimpleIoc.Default.Register<IAssemblyInfoServiceCreator, AssemblyInfoServiceCreator>();
             SimpleIoc.Default.Register<ITreeConverterVisitor, TreeConverterVisitor>();
             SimpleIoc.Default.Register<ITreeItemsConverterVisitor, TreeItemsConvertersVisitor>();

@@ -51,7 +51,7 @@ namespace ViewModel
         {
             if (projectService.Projects.IsEmpty())
             {
-                dialogService.ShowMessageBox(this, "No projects opened", "No available projects to select", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //dialogService.ShowMessageBox(this, "No projects opened", "No available projects to select", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             var vm = SimpleIoc.Default.GetInstance<ProjectSelectDialogViewModel>();
@@ -69,12 +69,12 @@ namespace ViewModel
             {
                 projectService.Export(project.Guid, new XmlAssemblyExporter(settings.FileName));
             }
-            dialogService.ShowMessageBox(
-                this,
-                "This is the text.",
-                "This Is The Caption",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            //dialogService.ShowMessageBox(
+            //    this,
+            //    "This is the text.",
+            //    "This Is The Caption",
+            //    MessageBoxButton.OK,
+            //    MessageBoxImage.Information);
         }
 
         protected void ImportXmlCommandExecute()

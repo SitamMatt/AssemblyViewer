@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Model.Services.Data;
 using Model.Services.Interfaces;
-using Tester;
 using ViewModel.Data;
 using ViewModel.Visitors;
 
