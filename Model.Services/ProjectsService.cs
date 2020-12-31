@@ -25,30 +25,13 @@ namespace Model.Services
             Projects = new ObservableCollection<Project>();
         }
 
-        public void OpenDll(string path)
-        {
-            var assembly = Assembly.LoadFile(path);
-            // todo make it DI'able
-            var converter = new Converter();
-            var asmInfo = converter.Convert(assembly);
-            var project = new Project
-            {
-                Name = asmInfo.Name,
-                Guid = Guid.NewGuid(),
-                AssemblyInfo = asmInfo
-            };
-            Projects.Add(project);
-        }
-
         public void Export(Guid projectGuid, IAssemblyExporter exporter)
         {
-            //var project = Projects.FirstOrDefault(x => x.Guid == projectGuid);
-            var project = Projects.FirstOrDefault();
+            var project = Projects.FirstOrDefault(x => x.Guid == projectGuid);
             if(project == null)
             {
                 // ex
             }
-            //TODO : export project instead of AssemblyInfo
             exporter.Export(project.AssemblyInfo);
         }
 
@@ -57,7 +40,6 @@ namespace Model.Services
             var info = importer.Import();
             var project = new Project
             {
-                Name = info.Name,
                 Guid = Guid.NewGuid(),
                 AssemblyInfo = info
             };

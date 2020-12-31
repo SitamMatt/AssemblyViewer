@@ -51,8 +51,18 @@ namespace ViewModel
 
         protected void OpenCommandExecute()
         {
-            var filename = _ioService.OpenFileDialog();
-            _projectService.OpenDll(filename);
+            var settings = new SaveFileDialogSettings
+            {
+                Title = "Select assembly file to load",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                Filter = "Dll files (*.dll)|*.dll",
+                CheckFileExists = true
+            };
+            var success = dialogService.ShowSaveFileDialog(this, settings);
+            if (success == true)
+            {
+                _projectService.Import(new DllFileAssemblyImporter(settings.FileName));
+            }
         }
 
         public RelayCommand CloseCommand
