@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Model.Converters;
 using Model.Data;
 using Model.Services.Interfaces;
@@ -24,7 +25,7 @@ namespace Model.Services
             _assemblyInfo.Accept(visitor);
         }
 
-        public void Accept(int key, IVisitor visitor)
+        public void Accept(Guid key, IVisitor visitor)
         {
             _assemblyInfo.Lookup[key].Accept(visitor);
         }

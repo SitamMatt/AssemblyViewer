@@ -12,7 +12,7 @@ namespace ViewModel.Visitors
 
         protected TreeNode createBasicNode(AsmComponent component)
         {
-            return new TreeNode {Name = component.Name, Hash = component.GetHashCode()};
+            return new TreeNode {Name = component.Name, Guid = component.Guid};
         }
 
         public void Handle(AssemblyInfo assemblyInfo)

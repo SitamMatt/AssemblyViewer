@@ -53,7 +53,7 @@ namespace ViewModel
         private void ExecuteExpandCommand(TreeNode node)
         {
             if (!_nodesList.Contains(node)) return;
-            _assemblyInfoService.Accept(node.Hash, _childrenConverter);
+            _assemblyInfoService.Accept(node.Guid, _childrenConverter);
             node.Children.Clear();
             node.Children.AddRange(_childrenConverter.Result);
             _nodesList.AddRange(_childrenConverter.Result);

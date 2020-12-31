@@ -1,8 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
-using Model.Data;
-using Model.Services;
-using Model.VisitorPattern;
+using Model.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 using ViewModel.Data;

@@ -13,16 +13,17 @@ namespace Model.Converters
     {
         protected AssemblyInfo _assemblyInfo;
         protected Dictionary<string, TypeInfo> _typesLookup = new Dictionary<string, TypeInfo>();
-        public Dictionary<int, AsmComponent> NodesLookup { get; set; } = new Dictionary<int, AsmComponent>();
+        public Dictionary<Guid, AsmComponent> NodesLookup { get; } = new Dictionary<Guid, AsmComponent>();
 
         public AssemblyInfo Convert(Assembly assembly)
         {
             _assemblyInfo = new AssemblyInfo
             {
                 Name = assembly.FullName,
-                Modules = assembly.Modules.Select(ConvertModule).ToList()
+                Modules = assembly.Modules.Select(ConvertModule).ToList(),
+                Guid = Guid.NewGuid()
             };
-            NodesLookup[_assemblyInfo.GetHashCode()] = _assemblyInfo;
+            NodesLookup[_assemblyInfo.Guid] = _assemblyInfo;
             _assemblyInfo.Lookup = NodesLookup;
             return _assemblyInfo;
         }
@@ -32,9 +33,10 @@ namespace Model.Converters
             var moduleInfo = new ModuleInfo
             {
                 Name = module.Name,
-                Types = module.GetTypes().Select(ConvertType).ToList()
+                Types = module.GetTypes().Select(ConvertType).ToList(),
+                Guid = Guid.NewGuid()
             };
-            NodesLookup[moduleInfo.GetHashCode()] = moduleInfo;
+            NodesLookup[moduleInfo.Guid] = moduleInfo;
             return moduleInfo;
         }
 
@@ -45,9 +47,10 @@ namespace Model.Converters
             var typeInfo = new TypeInfo
             {
                 Name = type.FullName,
+                Guid = Guid.NewGuid()
             };
             _typesLookup[typeInfo.Name] = typeInfo;
-            NodesLookup[typeInfo.GetHashCode()] = typeInfo;
+            NodesLookup[typeInfo.Guid] = typeInfo;
             typeInfo.Fields = type.GetFields().Select(ConvertField).ToList();
             return typeInfo;
         }
@@ -59,9 +62,10 @@ namespace Model.Converters
                 Name = field.Name,
                 Attributes = field.Attributes,
                 DeclaringType = _typesLookup[field.DeclaringType.FullName],
-                Type = ConvertType(field.FieldType)
+                Type = ConvertType(field.FieldType),
+                Guid = Guid.NewGuid()
             };
-            NodesLookup[fieldInfo.GetHashCode()] = fieldInfo;
+            NodesLookup[fieldInfo.Guid] = fieldInfo;
             return fieldInfo;
         }
     }

@@ -6,6 +6,7 @@ using Model.Services.Data;
 using Model.Services.Wpf;
 using Model.Services.Interfaces;
 using ViewModel;
+using MvvmDialogs;
 
 namespace View
 {
@@ -22,6 +23,8 @@ namespace View
             SimpleIoc.Default.Register<IAssemblyInfoServiceCreator, AssemblyInfoServiceCreator>();
             SimpleIoc.Default.Register<ITreeConverterVisitor, TreeConverterVisitor>();
             SimpleIoc.Default.Register<ITreeItemsConverterVisitor, TreeItemsConvertersVisitor>();
+            SimpleIoc.Default.Register<IDialogService>(() => new DialogService(dialogTypeLocator: new DialogLocator()));
+            SimpleIoc.Default.Register<ProjectSelectDialogViewModel>();
         }
 
         public MainViewModel MainViewModel
@@ -37,6 +40,11 @@ namespace View
         public NavigationViewModel NavigationViewModel
         {
             get => SimpleIoc.Default.GetInstance<NavigationViewModel>();
+        }
+
+        public ProjectSelectDialogViewModel ProjectSelectDialogViewModel
+        {
+            get => SimpleIoc.Default.GetInstance<ProjectSelectDialogViewModel>();
         }
     }
 }

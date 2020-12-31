@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace ViewModel.Data
 {
@@ -6,6 +7,6 @@ namespace ViewModel.Data
     {
         public string Name { get; set; }
         public ObservableCollection<TreeNode> Children { get; set; }
-        public int Hash { get; set; }
+        public Guid Guid { get; set; }
     }
 }
