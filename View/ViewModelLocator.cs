@@ -14,17 +14,22 @@ namespace View
     {
         public ViewModelLocator()
         {
+            // view models
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<NavigationViewModel>();
-            SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
             SimpleIoc.Default.Register<MenuViewModel>();
+            SimpleIoc.Default.Register<ProjectSelectDialogViewModel>();
+
+            // services
+            SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
             SimpleIoc.Default.Register<IProjectsService, ProjectsService>();
             SimpleIoc.Default.Register<IIoService, IOService>();
             SimpleIoc.Default.Register<IAssemblyInfoServiceCreator, AssemblyInfoServiceCreator>();
             SimpleIoc.Default.Register<ITreeConverterVisitor, TreeConverterVisitor>();
             SimpleIoc.Default.Register<ITreeItemsConverterVisitor, TreeItemsConvertersVisitor>();
+            SimpleIoc.Default.Register<ILifetimeService, LifetimeService>();
+            SimpleIoc.Default.Register<IAssemblyConverter, AssemblyConverter>();
             SimpleIoc.Default.Register<IDialogService>(() => new DialogService(dialogTypeLocator: new DialogLocator()));
-            SimpleIoc.Default.Register<ProjectSelectDialogViewModel>();
         }
 
         public MainViewModel MainViewModel

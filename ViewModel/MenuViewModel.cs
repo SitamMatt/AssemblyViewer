@@ -11,20 +11,21 @@ using Model.Services;
 using MvvmDialogs;
 using GalaSoft.MvvmLight.Ioc;
 using MvvmDialogs.FrameworkDialogs.SaveFile;
+using MvvmDialogs.FrameworkDialogs.OpenFile;
 
 namespace ViewModel
 {
     public class MenuViewModel : ViewModelBase
     {
-        private readonly IProjectsService _projectService;
-        private IIoService _ioService;
-        private readonly IDialogService dialogService; 
+        private readonly IProjectsService projectService;
+        private readonly IDialogService dialogService;
+        private readonly ILifetimeService lifetimeService;
 
-        public MenuViewModel(IProjectsService projectsService, IIoService ioService, IDialogService dialogService)
+        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService, ILifetimeService lifetimeService)
         {
-            _projectService = projectsService;
-            _ioService = ioService;
+            this.projectService = projectsService;
             this.dialogService = dialogService;
+            this.lifetimeService = lifetimeService;
             ExitCommand = new RelayCommand(ExitCommandExecute, () => true);
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
             CloseCommand = new RelayCommand(CloseCommandExecute, () => true);
@@ -32,59 +33,23 @@ namespace ViewModel
             ImportXmlCommand = new RelayCommand(ImportXmlCommandExecute, () => true);
         }
 
-        public RelayCommand ExitCommand
-        {
-            get;
-            private set;
-        }
+        public RelayCommand CloseCommand { get; }
 
-        protected void ExitCommandExecute()
-        {
-            
-        }
+        public RelayCommand ExitCommand { get; }
 
-        public RelayCommand OpenCommand
-        {
-            get;
-            private set;
-        }
+        public RelayCommand ExportXmlCommand { get; }
 
-        protected void OpenCommandExecute()
-        {
-            var settings = new SaveFileDialogSettings
-            {
-                Title = "Select assembly file to load",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                Filter = "Dll files (*.dll)|*.dll",
-                CheckFileExists = true
-            };
-            var success = dialogService.ShowSaveFileDialog(this, settings);
-            if (success == true)
-            {
-                _projectService.Import(new DllFileAssemblyImporter(settings.FileName));
-            }
-        }
+        public RelayCommand ImportXmlCommand { get; }
 
-        public RelayCommand CloseCommand
-        {
-            get;
-            private set;
-        }
+        public RelayCommand OpenCommand { get; }
 
-        protected void CloseCommandExecute()
-        {
-            
-        }
+        protected void CloseCommandExecute() { }
 
-        public RelayCommand ExportXmlCommand
-        {
-            get;
-            private set;
-        }
+        protected void ExitCommandExecute() => lifetimeService.Exit(0);
 
         protected void ExportXmlCommandExecute()
         {
-            if (_projectService.Projects.IsEmpty())
+            if (projectService.Projects.IsEmpty())
             {
                 dialogService.ShowMessageBox(this, "No projects opened", "No available projects to select", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -102,7 +67,7 @@ namespace ViewModel
             var success1 = dialogService.ShowSaveFileDialog(this, settings);
             if (success == true)
             {
-                _projectService.Export(project.Guid, new XmlAssemblyExporter(settings.FileName));
+                projectService.Export(project.Guid, new XmlAssemblyExporter(settings.FileName));
             }
             dialogService.ShowMessageBox(
                 this,
@@ -112,17 +77,36 @@ namespace ViewModel
                 MessageBoxImage.Information);
         }
 
-        public RelayCommand ImportXmlCommand
-        {
-            get;
-            private set;
-        }
-
         protected void ImportXmlCommandExecute()
         {
-            var filename = _ioService.OpenFileDialog();
-            if (filename == null) return;
-            _projectService.Import(new XmlAssemblyImporter(filename));
+            var settings = new OpenFileDialogSettings
+            {
+                Title = "Select xml file to load",
+                Filter = "XML files (*.xml)|*.xml",
+                CheckFileExists = true,
+            };
+            var success = dialogService.ShowOpenFileDialog(this, settings);
+            if (success == true)
+            {
+                projectService.Import(new XmlAssemblyImporter(settings.FileName));
+            }
+        }
+
+        protected void OpenCommandExecute()
+        {
+            var settings = new OpenFileDialogSettings
+            {
+                Title = "Select assembly file to load",
+                Filter = "Dll files (*.dll)|*.dll",
+                CheckFileExists = true,
+            };
+            var success = dialogService.ShowOpenFileDialog(this, settings);
+            if (success == true)
+            {
+                projectService.Import(new DllFileAssemblyImporter(
+                    settings.FileName,
+                    SimpleIoc.Default.GetInstance<IAssemblyConverter>()));
+            }
         }
     }
 }

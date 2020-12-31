@@ -11,16 +11,17 @@ namespace Model.Services
     public class DllFileAssemblyImporter : IAssemblyImporter
     {
         private readonly string path;
+        private readonly IAssemblyConverter converter;
 
-        public DllFileAssemblyImporter(string path)
+        public DllFileAssemblyImporter(string path, IAssemblyConverter converter)
         {
             this.path = path;
+            this.converter = converter;
         }
 
         public AssemblyInfo Import()
         {
             var assembly = Assembly.LoadFile(path);
-            var converter = new Converter();
             var asmInfo = converter.Convert(assembly);
             return asmInfo;
         }
