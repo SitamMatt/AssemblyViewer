@@ -4,21 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
+             xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
              xmlns:data="clr-namespace:ViewModel.Data;assembly=ViewModel"
-             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             d:DesignHeight="300" d:DesignWidth="300">
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:converters="clr-namespace:View.Converters" xmlns:view="clr-namespace:View" 
+             xmlns:etv="clr-namespace:ExtendedTreeView;assembly=ExtendedTreeView"
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=viewModel:MainViewModel, IsDesignTimeCreatable=True}">
+    <UserControl.Resources>
+        <converters:AssemblyTreeItemConverter x:Key="AssemblyTreeItemConverter" />
+    </UserControl.Resources>
     <Grid>
-        <TreeView Name="TrvStructure" ItemsSource="{Binding Root}" Margin="10" TreeViewItem.Expanded="ItemExpanded">
-            <!-- <b:Interaction.Triggers> -->
-            <!--      <b:EventTrigger> -->
-            <!--          <b:InvokeCommandAction Command="{Binding }" par></b:InvokeCommandAction> -->
-            <!--      </b:EventTrigger> -->
-            <!--  </b:Interaction.Triggers> -->
-            <TreeView.ItemTemplate>
+        <etv:ExtendedTreeView ItemsSource="{Binding Root}" Margin="10">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="ItemExpanded">
+                    <b:InvokeCommandAction Command="{Binding ExpandCommand}" EventArgsConverter="{StaticResource AssemblyTreeItemConverter}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+            <etv:ExtendedTreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type data:TreeNode}" ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}" />
                 </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+            </etv:ExtendedTreeView.ItemTemplate>
+        </etv:ExtendedTreeView>
     </Grid>
 </UserControl>
