@@ -1,9 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Model.Services.Data;
-using Model.Services.Interfaces;
 using MvvmDialogs;
-using System;
+using Services.Data;
+using Services.Interfaces;
 using System.Collections.ObjectModel;
 
 namespace ViewModel

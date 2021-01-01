@@ -1,12 +1,12 @@
 ﻿using Model.Converters;
 using Model.Data;
-using Model.Services.Interfaces;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Model.Services
+namespace Services
 {
     public class DllFileAssemblyImporter : IAssemblyImporter
     {

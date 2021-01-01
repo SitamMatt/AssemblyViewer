@@ -1,10 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
-using Model.Services;
 using ViewModel.Visitors;
-using Model.Services.Data;
-using Model.Services.Interfaces;
 using ViewModel;
 using MvvmDialogs;
+using Services;
+using Services.Interfaces;
+using Services.Factory;
 
 namespace View
 {

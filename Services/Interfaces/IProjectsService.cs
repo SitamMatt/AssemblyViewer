@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Model.Services.Data;
+using Services.Data;
 
-namespace Model.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IProjectsService
     {

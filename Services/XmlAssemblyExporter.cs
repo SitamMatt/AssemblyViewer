@@ -1,14 +1,11 @@
 ﻿using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.Configuration;
 using Model.Data;
-using Model.Services.Interfaces;
-using System;
-using System.Collections.Generic;
+using Services.Interfaces;
 using System.IO;
-using System.Text;
 using System.Xml;
 
-namespace Model.Services
+namespace Services
 {
     public class XmlAssemblyExporter : IAssemblyExporter
     {
@@ -27,7 +24,7 @@ namespace Model.Services
                 .EnableReferences()
                 .Create();
             //TODO: exceptions handling
-            using(var fs = File.Create(_path))
+            using (var fs = File.Create(_path))
             {
                 serializer.Serialize(
                     new XmlWriterSettings { Indent = true },

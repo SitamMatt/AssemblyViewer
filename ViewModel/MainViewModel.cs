@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Common.Extensions;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Model.Services.Interfaces;
+using Services.Interfaces;
 using ViewModel.Data;
 using ViewModel.Visitors;
 

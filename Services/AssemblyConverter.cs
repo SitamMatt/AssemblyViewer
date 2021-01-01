@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Model.Data;
-using Model.Services.Interfaces;
-using Model.VisitorPattern;
+using Services.Interfaces;
 using FieldInfo = Model.Data.FieldInfo;
 using TypeInfo = Model.Data.TypeInfo;
 
-namespace Model.Services
+namespace Services
 {
     public class AssemblyConverter : IAssemblyConverter
     {

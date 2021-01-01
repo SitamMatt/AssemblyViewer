@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:data="clr-namespace:Model.Services.Data;assembly=Model.Services"
+        xmlns:services="clr-namespace:Services.Data;assembly=Services"
         xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
@@ -13,7 +13,7 @@
     <StackPanel Margin="10,10,10,10">
         <ListView ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type data:Project}">
+                <DataTemplate DataType="{x:Type services:Project}">
                     <TextBlock Text="{Binding Name}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>

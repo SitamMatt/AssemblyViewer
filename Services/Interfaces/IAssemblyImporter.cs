@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Model.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IAssemblyImporter
     {

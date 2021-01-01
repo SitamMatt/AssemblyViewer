@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Model.Converters;
-using Model.Services.Data;
-using Model.Services.Interfaces;
+using Services.Data;
+using Services.Interfaces;
 
-namespace Model.Services
+namespace Services
 {
     public class ProjectsService : IProjectsService
     {
@@ -28,7 +28,7 @@ namespace Model.Services
         public void Export(Guid projectGuid, IAssemblyExporter exporter)
         {
             var project = Projects.FirstOrDefault(x => x.Guid == projectGuid);
-            if(project == null)
+            if (project == null)
             {
                 // ex
             }
@@ -46,6 +46,6 @@ namespace Model.Services
             Projects.Add(project);
         }
 
-        
+
     }
 }

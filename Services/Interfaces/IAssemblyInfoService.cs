@@ -1,7 +1,7 @@
 ﻿using System;
 using Model.VisitorPattern;
 
-namespace Model.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IAssemblyInfoService
     {

@@ -1,7 +1,7 @@
 ﻿using Model.Data;
-using Model.Services.Interfaces;
+using Services.Interfaces;
 
-namespace Model.Services.Data
+namespace Services.Factory
 {
     public class AssemblyInfoServiceCreator : IAssemblyInfoServiceCreator
     {

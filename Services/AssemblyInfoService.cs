@@ -1,9 +1,9 @@
 ﻿using System;
 using Model.Data;
-using Model.Services.Interfaces;
 using Model.VisitorPattern;
+using Services.Interfaces;
 
-namespace Model.Services
+namespace Services
 {
     public class AssemblyInfoService : IAssemblyInfoService
     {

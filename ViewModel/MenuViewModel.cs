@@ -1,17 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Model.Services.Interfaces;
-using Model.Services;
 using MvvmDialogs;
 using GalaSoft.MvvmLight.Ioc;
 using MvvmDialogs.FrameworkDialogs.SaveFile;
 using MvvmDialogs.FrameworkDialogs.OpenFile;
+using Services.Interfaces;
+using Services;
 
 namespace ViewModel
 {

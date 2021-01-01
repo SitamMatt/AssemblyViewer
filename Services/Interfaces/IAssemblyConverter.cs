@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Model.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IAssemblyConverter
     {

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using Model.Data;
-using Model.Services.Interfaces;
 using System.IO;
 using System.Xml;
 using ExtendedXmlSerializer;
 using ExtendedXmlSerializer.Configuration;
+using Services.Interfaces;
 
-namespace Model.Services
+namespace Services
 {
-    public class XmlAssemblyImporter: IAssemblyImporter
+    public class XmlAssemblyImporter : IAssemblyImporter
     {
         private readonly string _path;
 

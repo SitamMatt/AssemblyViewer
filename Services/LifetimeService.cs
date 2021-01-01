@@ -1,9 +1,7 @@
-﻿using Model.Services.Interfaces;
+﻿using Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Model.Services
+namespace Services
 {
     public class LifetimeService : ILifetimeService
     {

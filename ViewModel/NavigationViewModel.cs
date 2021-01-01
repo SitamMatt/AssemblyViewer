@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
-using Model.Services.Data;
-using Model.Services.Interfaces;
-using ViewModel.Data;
+using Services.Data;
+using Services.Factory;
+using Services.Interfaces;
 using ViewModel.Visitors;
 
 namespace ViewModel
