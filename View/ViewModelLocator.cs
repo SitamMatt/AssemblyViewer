@@ -5,6 +5,7 @@ using MvvmDialogs;
 using Services;
 using Services.Interfaces;
 using Services.Factory;
+using System.IO.Abstractions;
 
 namespace View
 {
@@ -26,6 +27,7 @@ namespace View
             SimpleIoc.Default.Register<ITreeItemsConverterVisitor, TreeItemsConvertersVisitor>();
             SimpleIoc.Default.Register<ILifetimeService, LifetimeService>();
             SimpleIoc.Default.Register<IAssemblyConverter, AssemblyConverter>();
+            SimpleIoc.Default.Register<IFileSystem, FileSystem>();
             SimpleIoc.Default.Register<IDialogService>(() => new DialogService(dialogTypeLocator: new DialogLocator()));
         }
 

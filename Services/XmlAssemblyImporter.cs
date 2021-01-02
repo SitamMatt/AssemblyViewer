@@ -12,11 +12,11 @@ namespace Services
 {
     public class XmlAssemblyImporter : IAssemblyImporter
     {
-        private readonly string _path;
+        private readonly Stream stream;
 
-        public XmlAssemblyImporter(string path)
+        public XmlAssemblyImporter(Stream stream)
         {
-            _path = path;
+            this.stream = stream;
         }
 
         public AssemblyInfo Import()
@@ -26,10 +26,7 @@ namespace Services
                 .UseOptimizedNamespaces()
                 .EnableReferences()
                 .Create();
-            using (var fs = File.Open(_path, FileMode.Open))
-            {
-                return serializer.Deserialize<AssemblyInfo>(fs);
-            }
+            return serializer.Deserialize<AssemblyInfo>(stream);
         }
     }
 }

@@ -8,6 +8,7 @@ using MvvmDialogs.FrameworkDialogs.SaveFile;
 using MvvmDialogs.FrameworkDialogs.OpenFile;
 using Services.Interfaces;
 using Services;
+using System.IO.Abstractions;
 
 namespace ViewModel
 {
@@ -16,12 +17,14 @@ namespace ViewModel
         private readonly IProjectsService projectService;
         private readonly IDialogService dialogService;
         private readonly ILifetimeService lifetimeService;
+        private readonly IFileSystem fileSystem;
 
-        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService, ILifetimeService lifetimeService)
+        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService, ILifetimeService lifetimeService, IFileSystem fileSystem)
         {
             this.projectService = projectsService;
             this.dialogService = dialogService;
             this.lifetimeService = lifetimeService;
+            this.fileSystem = fileSystem;
             ExitCommand = new RelayCommand(ExitCommandExecute, () => true);
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
             CloseCommand = new RelayCommand(CloseCommandExecute, () => true);
@@ -84,7 +87,10 @@ namespace ViewModel
             var success = dialogService.ShowOpenFileDialog(this, settings);
             if (success == true)
             {
-                projectService.Import(new XmlAssemblyImporter(settings.FileName));
+                using (var file = fileSystem.File.OpenRead(settings.FileName))
+                {
+                    projectService.Import(new XmlAssemblyImporter(file));
+                }
             }
         }
 
