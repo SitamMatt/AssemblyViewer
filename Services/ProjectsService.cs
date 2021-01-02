@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
-using Model.Converters;
 using Services.Data;
 using Services.Interfaces;
 
@@ -45,7 +42,5 @@ namespace Services
             };
             Projects.Add(project);
         }
-
-
     }
 }

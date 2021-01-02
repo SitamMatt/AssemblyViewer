@@ -19,9 +19,9 @@ namespace Services
             AssemblyInfo assemblyInfo = new AssemblyInfo
             {
                 Name = assembly.FullName,
-                Modules = assembly.Modules.Select(ConvertModule).ToList(),
                 Guid = Guid.NewGuid(),
-                Lookup = nodesLookup
+                Lookup = nodesLookup,
+                Modules = assembly.Modules.Select(ConvertModule).ToList()
             };
             nodesLookup[assemblyInfo.Guid] = assemblyInfo;
             return assemblyInfo;

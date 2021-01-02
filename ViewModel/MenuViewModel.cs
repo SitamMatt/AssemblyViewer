@@ -9,6 +9,7 @@ using MvvmDialogs.FrameworkDialogs.OpenFile;
 using Services.Interfaces;
 using Services;
 using System.IO.Abstractions;
+using System.Runtime.Loader;
 
 namespace ViewModel
 {
@@ -105,9 +106,13 @@ namespace ViewModel
             var success = dialogService.ShowOpenFileDialog(this, settings);
             if (success == true)
             {
-                projectService.Import(new DllFileAssemblyImporter(
-                    settings.FileName,
+                using (var file = fileSystem.File.OpenRead(settings.FileName))
+                {
+                    var stream = AssemblyLoadContext.Default.LoadFromStream(file);
+                    projectService.Import(new DllAssemblyImporter(
+                    stream,
                     SimpleIoc.Default.GetInstance<IAssemblyConverter>()));
+                }
             }
         }
     }
