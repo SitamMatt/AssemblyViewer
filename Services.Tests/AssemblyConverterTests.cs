@@ -1,3 +1,5 @@
+using ExtendedXmlSerializer;
+using ExtendedXmlSerializer.Configuration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
@@ -47,8 +49,14 @@ namespace Tester
         [Test]
         public void ConversionTest()
         {
+            IExtendedXmlSerializer serializer = new ConfigurationContainer()
+                .UseAutoFormatting()
+                .UseOptimizedNamespaces()
+                .EnableReferences()
+                .Create();
             var converter = new AssemblyConverter();
             var assemblyInfo = converter.Convert(assembly);
+            var str = serializer.Serialize(assemblyInfo);
             Assert.AreEqual(1, assemblyInfo.Modules.Count);
             Assert.AreEqual(2, assemblyInfo.Modules[0].Types.Count);
             var typeA = assemblyInfo.Modules[0].Types[0];

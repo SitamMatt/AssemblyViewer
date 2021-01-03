@@ -9,28 +9,23 @@ namespace Services
 {
     public class XmlAssemblyExporter : IAssemblyExporter
     {
-        private readonly string _path;
+        private readonly Stream stream;
 
-        public XmlAssemblyExporter(string path)
+        public XmlAssemblyExporter(Stream stream)
         {
-            _path = path;
+            this.stream = stream;
         }
         public void Export(AssemblyInfo assemblyInfo)
         {
-            //TODO: this should be DI'ed
             IExtendedXmlSerializer serializer = new ConfigurationContainer()
                 .UseAutoFormatting()
                 .UseOptimizedNamespaces()
                 .EnableReferences()
                 .Create();
-            //TODO: exceptions handling
-            using (var fs = File.Create(_path))
-            {
-                serializer.Serialize(
-                    new XmlWriterSettings { Indent = true },
-                    fs,
-                    assemblyInfo);
-            }
+            serializer.Serialize(
+                new XmlWriterSettings { Indent = true },
+                stream,
+                assemblyInfo);
         }
     }
 }
