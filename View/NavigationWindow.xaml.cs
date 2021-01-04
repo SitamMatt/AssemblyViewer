@@ -32,5 +32,15 @@ namespace View
             // mvm.Name
             // e.Cancel = true;
         }
+
+        private void DockingManager_DocumentClosing(object sender, DocumentClosingEventArgs e)
+        {
+
+        }
+
+        private void DockingManager_DocumentClosed(object sender, DocumentClosedEventArgs e)
+        {
+
+        }
     }
 }

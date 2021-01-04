@@ -15,7 +15,6 @@ namespace ViewModel
     {
         private readonly IProjectsService _projectService;
         private readonly IAssemblyInfoServiceCreator _assemblyInfoServiceCreator;
-        private MainViewModel _activeVm;
 
         public NavigationViewModel(IProjectsService projectsService, IAssemblyInfoServiceCreator assemblyInfoServiceCreator)
         {
@@ -23,17 +22,17 @@ namespace ViewModel
             _assemblyInfoServiceCreator = assemblyInfoServiceCreator;
             _projectService.Projects.CollectionChanged += ProjectsOnCollectionChanged;
             Tabs = new ObservableCollection<MainViewModel>();
-            CloseTabCommand = new RelayCommand<Object>(ExecuteCloseTabCommand, CanExecuteCloseTabCommand);
+            CloseTabCommand = new RelayCommand<MainViewModel>(ExecuteCloseTabCommand, CanExecuteCloseTabCommand);
         }
 
-        private void ExecuteCloseTabCommand(Object projectName)
+        private void ExecuteCloseTabCommand(MainViewModel viewModel)
         {
-            _projectService.CloseProject(_activeVm.Name);
+            _projectService.CloseProject(viewModel.Guid);
         }
 
-        private bool CanExecuteCloseTabCommand(Object arg)
+        private bool CanExecuteCloseTabCommand(MainViewModel arg)
         {
-            return true;
+            return arg != null;
         }
 
         private void ProjectsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -52,16 +51,6 @@ namespace ViewModel
 
         public ObservableCollection<MainViewModel> Tabs { get; set; }
         
-        public RelayCommand<Object> CloseTabCommand { get; }
-
-        public MainViewModel ActiveVM
-        {
-            get => _activeVm;
-            set
-            {
-                _activeVm = value;
-                RaisePropertyChanged(nameof(ActiveVM));
-            }
-        }
+        public RelayCommand<MainViewModel> CloseTabCommand { get; }
     }
 }
