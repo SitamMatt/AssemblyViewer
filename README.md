@@ -13,21 +13,21 @@ The application to view the content of the clr libray
 
 # Features
 
-- [ ] reading contents of the dll
-- [ ] Exporting/importing to xml
-- [ ] Graphical representation in treeview
+- [x] reading contents of the dll
+- [x] Exporting/importing to xml
+- [x] Graphical representation in treeview
 
 # Roadmap
 
 ## 1st Stage
 
-- [ ] Menu bar with logic
+- [x] Menu bar with logic
 - [ ] Data classes for assebly info
 - [x] Converting assembly content
 - [x] Treeview representation of assembly
 
 ## 2nd Stage
 
-- [ ] Reading assembly from file
-- [ ] XML import/export
+- [x] Reading assembly from file
+- [x] XML import/export
 - [ ] Exe file support
