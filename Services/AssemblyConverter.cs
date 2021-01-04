@@ -27,7 +27,7 @@ namespace Services
             return assemblyInfo;
         }
 
-        protected ModuleInfo ConvertModule(Module module)
+        public ModuleInfo ConvertModule(Module module)
         {
             var moduleInfo = new ModuleInfo
             {
@@ -39,7 +39,7 @@ namespace Services
             return moduleInfo;
         }
 
-        protected TypeInfo ConvertType(Type type)
+        public TypeInfo ConvertType(Type type)
         {
             if (type.FullName != null && typesLookup.ContainsKey(type.FullName))
                 return typesLookup[type.FullName];
@@ -54,7 +54,7 @@ namespace Services
             return typeInfo;
         }
 
-        protected FieldInfo ConvertField(System.Reflection.FieldInfo field)
+        public FieldInfo ConvertField(System.Reflection.FieldInfo field)
         {
             var fieldInfo = new FieldInfo
             {

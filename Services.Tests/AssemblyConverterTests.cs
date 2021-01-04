@@ -13,7 +13,6 @@ namespace Services.Tests
     {
         private Assembly assembly;
 
-        [SetUp]
         public void Setup()
         {
             var source = @"
@@ -49,6 +48,7 @@ namespace Tester
         [Test]
         public void ConversionTest()
         {
+            Setup();
             IExtendedXmlSerializer serializer = new ConfigurationContainer()
                 .UseAutoFormatting()
                 .UseOptimizedNamespaces()
@@ -68,5 +68,37 @@ namespace Tester
             Assert.AreEqual(typeA, typeB.Fields[0].Type);
             Assert.AreEqual(typeB, typeB.Fields[0].DeclaringType);
         }
+
+        [Test]
+        public void ModuleConversionTest()
+        {
+            var converter = new AssemblyConverter();
+            var modules = assembly.GetModules();
+            Assert.AreEqual(1, modules.Length);
+            var module = converter.ConvertModule(modules[0]);
+            var typeA = module.Types[0];
+            var typeB = module.Types[1];
+            Assert.AreEqual("Tester.A", typeA.Name);
+            Assert.AreEqual("Tester.B", typeB.Name);
+            Assert.AreEqual(typeB, typeA.Fields[0].Type);
+            Assert.AreEqual(typeA, typeA.Fields[0].DeclaringType);
+            Assert.AreEqual(typeA, typeB.Fields[0].Type);
+            Assert.AreEqual(typeB, typeB.Fields[0].DeclaringType);
+        }
+
+        [Test]
+        public void TypeConversionTest()
+        {
+            var converter = new AssemblyConverter();
+            var typeA =converter.ConvertType(assembly.GetModules()[0].GetTypes()[0]);
+            var typeB = converter.ConvertType(assembly.GetModules()[0].GetTypes()[1]);
+            Assert.AreEqual("Tester.A", typeA.Name);
+            Assert.AreEqual("Tester.B", typeB.Name);
+            Assert.AreEqual(typeB, typeA.Fields[0].Type);
+            Assert.AreEqual(typeA, typeA.Fields[0].DeclaringType);
+            Assert.AreEqual(typeA, typeB.Fields[0].Type);
+            Assert.AreEqual(typeB, typeB.Fields[0].DeclaringType);
+        }
+
     }
 }
