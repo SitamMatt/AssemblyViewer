@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Services;
 using Services.Data;
 using Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -62,13 +63,6 @@ namespace Tester
         }
         
         [Test]
-        public void CloseCommandTest()
-        {
-            //var vm = new MenuViewModel(null,null,null);
-            //Assert.AreEqual(true, vm.CloseCommand.CanExecute(null));
-        }
-        
-        [Test]
         public void OpenCommandTest()
         {
             var dialogServiceMock = new Mock<IDialogService>();
@@ -112,7 +106,7 @@ namespace Tester
         }
 
         [Test]
-        public void ExportXmlCommandTest()
+        public void ExportXmlCommandNoProjectsTest()
         {
             var dialogServiceMock = new Mock<IDialogService>();
             var filesystemMock = Mock.Of<IFileSystem>();
@@ -121,22 +115,6 @@ namespace Tester
 
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>());
-
-            //dialogServiceMock.Setup(
-            //    x => x.OpenFile(
-            //        It.IsAny<string>(),
-            //        It.IsAny<string>())
-            //    )
-            //    .Returns(@"F:\file.dll");
-
-            //Mock.Get(filesystemMock)
-            //    .Setup(x => x.File)
-            //    .Returns(fileMock);
-
-            //Mock.Get(fileMock)
-            //    .Setup(x => x.OpenRead(It.IsAny<string>()))
-            //    .Returns(assemblyStream);
-
 
             var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
 
@@ -147,15 +125,70 @@ namespace Tester
             projectServiceMock.Verify(x => x.Projects);
 
             dialogServiceMock.Verify(x => x.ShowWarning(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
 
-            //Mock.Get(filesystemMock).Verify(
-            //    x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
-            //    Times.Once);
+        [Test]
+        public void ExportXmlCommandTest()
+        {
+            var dialogServiceMock = new Mock<IDialogService>();
+            var filesystemMock = Mock.Of<IFileSystem>();
+            var fileMock = Mock.Of<IFile>();
+            var projectServiceMock = new Mock<IProjectsService>();
 
-            //projectServiceMock.Verify(
-            //    x => x.Import(
-            //        It.IsAny<XmlAssemblyImporter>()),
-            //    Times.Once);
+            Project project = new Project
+            {
+                Guid = Guid.Parse("199d0520-758b-4cf4-ab6a-4484d0b6fc0a")
+            };
+
+            projectServiceMock.Setup(x => x.Projects)
+                .Returns(new ObservableCollection<Project>() { project });
+
+            dialogServiceMock.Setup(
+                x => x.ShowDialog(
+                    It.IsAny<ProjectSelectDialogViewModel>())
+                )
+                .Callback(new InvocationAction(x => {
+                    var b = x.Arguments[0] as ProjectSelectDialogViewModel;
+                    b.SelectedItem = project;
+                }))
+                .Returns(true);
+
+            dialogServiceMock.Setup(
+                x => x.SaveFile(
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(@"F:\file.xml");
+
+            Mock.Get(filesystemMock)
+                .Setup(x => x.File)
+                .Returns(fileMock);
+
+            Mock.Get(fileMock)
+                .Setup(x => x.OpenWrite(It.IsAny<string>()))
+                .Returns(assemblyStream);
+
+            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+
+            Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
+
+            vm.ExportXmlCommand.Execute(null);
+
+            projectServiceMock.Verify(x => x.Projects);
+
+            dialogServiceMock.Verify(x => x.ShowDialog(It.IsAny<ProjectSelectDialogViewModel>()), Times.Once);
+
+            dialogServiceMock.Verify(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            Mock.Get(filesystemMock).Verify(
+                x => x.File.OpenWrite(It.Is<string>(y => y == @"F:\file.xml")),
+                Times.Once);
+
+            projectServiceMock.Verify(
+                x => x.Export(
+                    It.Is<Guid>(y => y == project.Guid),
+                    It.IsAny<XmlAssemblyExporter>()),
+                Times.Once);
         }
 
         [Test]

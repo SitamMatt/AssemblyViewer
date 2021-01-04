@@ -7,12 +7,13 @@
              xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
              xmlns:data="clr-namespace:ViewModel.Data;assembly=ViewModel"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
-             xmlns:converters="clr-namespace:View.Converters" xmlns:view="clr-namespace:View" 
+             xmlns:converters="clr-namespace:View.Converters" 
+             xmlns:view="clr-namespace:View" 
              xmlns:etv="clr-namespace:ExtendedTreeView;assembly=ExtendedTreeView"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=viewModel:MainViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <converters:AssemblyTreeItemConverter x:Key="AssemblyTreeItemConverter" />
+        <converters:AssemblyTreeItemConverter x:Key="AssemblyTreeItemConverter"/>
     </UserControl.Resources>
     <Grid>
         <etv:ExtendedTreeView ItemsSource="{Binding Root}" Margin="10">

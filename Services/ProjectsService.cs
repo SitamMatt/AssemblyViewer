@@ -10,11 +10,11 @@ namespace Services
     {
         public ObservableCollection<Project> Projects { get; }
 
-        public void CloseProject(string projectName)
+        public void CloseProject(Guid projectGuid)
         {
             Projects.Remove(
                 Projects
-                    .FirstOrDefault(x => x.Name == projectName));
+                    .FirstOrDefault(x => x.AssemblyInfo.Guid == projectGuid));
         }
 
         public ProjectsService()
@@ -25,11 +25,10 @@ namespace Services
         public void Export(Guid projectGuid, IAssemblyExporter exporter)
         {
             var project = Projects.FirstOrDefault(x => x.Guid == projectGuid);
-            if (project == null)
+            if (project != null)
             {
-                // ex
+                exporter.Export(project.AssemblyInfo);
             }
-            exporter.Export(project.AssemblyInfo);
         }
 
         public void Import(IAssemblyImporter importer)
