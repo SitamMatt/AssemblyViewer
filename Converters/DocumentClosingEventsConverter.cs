@@ -1,18 +1,15 @@
-﻿using System;
+﻿using AvalonDock;
+using System;
 using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace View.Converters
+namespace Converters
 {
-    public class AssemblyTreeItemConverter : IValueConverter
+    public class DocumentClosingEventsConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var args = value as RoutedEventArgs;
-            var node = args.OriginalSource as TreeViewItem;
-            return node.DataContext;
+            return value is DocumentClosedEventArgs args ? args.Document.Content : null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

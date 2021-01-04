@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
-        xmlns:converters="clr-namespace:View.Converters"
-        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel" 
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:converters="clr-namespace:Converters;assembly=Converters"
         Title="NavigationWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=viewModel:MainViewModel, IsDesignTimeCreatable=True}">
     <Window.Resources>

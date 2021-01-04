@@ -7,9 +7,9 @@
              xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
              xmlns:data="clr-namespace:ViewModel.Data;assembly=ViewModel"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors" 
-             xmlns:converters="clr-namespace:View.Converters" 
              xmlns:view="clr-namespace:View" 
-             xmlns:etv="clr-namespace:ExtendedTreeView;assembly=ExtendedTreeView"
+             xmlns:etv="clr-namespace:ExtendedTreeView;assembly=ExtendedTreeView" 
+             xmlns:converters="clr-namespace:Converters;assembly=Converters"
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=viewModel:MainViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>

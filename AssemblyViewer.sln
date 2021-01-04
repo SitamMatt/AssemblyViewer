@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Tests", "Services.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{C5454876-6098-4E84-987D-D030EDFADD23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Wpf", "Services.Wpf\Services.Wpf.csproj", "{F480CACF-DDD0-4054-8DC3-486C9D5C61C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Wpf", "Services.Wpf\Services.Wpf.csproj", "{F480CACF-DDD0-4054-8DC3-486C9D5C61C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converters", "Converters\Converters.csproj", "{D9134FDF-7984-4022-A659-9C55E494AA83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{F480CACF-DDD0-4054-8DC3-486C9D5C61C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F480CACF-DDD0-4054-8DC3-486C9D5C61C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F480CACF-DDD0-4054-8DC3-486C9D5C61C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9134FDF-7984-4022-A659-9C55E494AA83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9134FDF-7984-4022-A659-9C55E494AA83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9134FDF-7984-4022-A659-9C55E494AA83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9134FDF-7984-4022-A659-9C55E494AA83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
