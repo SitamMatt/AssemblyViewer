@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Services;
 using Services.Interfaces;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Runtime.Loader;
@@ -53,10 +54,10 @@ namespace ViewModel
             var success = dialogService.ShowDialog(vm);
             if (!success) return;
             var project = vm.SelectedItem;
-            var filename = dialogService.SaveFile("This Is The Title", "Text Documents (*.txt)|*.txt|All Files (*.*)|*.*");
+            var filename = dialogService.SaveFile("Select xml file to save", "XML files (*.xml)|*.xml");
             if (!string.IsNullOrEmpty(filename))
             {
-                using (var fs = fileSystem.File.OpenWrite(filename))
+                using (var fs = fileSystem.File.Open(filename, FileMode.Create))
                 {
                     projectService.Export(project.Guid, new XmlAssemblyExporter(fs));
                 }

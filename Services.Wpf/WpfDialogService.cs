@@ -62,7 +62,7 @@ namespace Services.Wpf
 
         public void ShowInfo(string Message, string Title)
         {
-            throw new NotImplementedException();
+            MessageBox.Show(Message, Title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void ShowMessage(string Message, string Title)

@@ -26,7 +26,7 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
         </Button>
-        <Button Margin="0,5,0,5" Content="Cancel" Command="{Binding CancelCommand}">
+        <Button Margin="0,5,0,5" Content="Cancel">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Click">
                     <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" PropertyName="DialogResult" Value="false"/>

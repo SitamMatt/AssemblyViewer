@@ -41,11 +41,11 @@ namespace Services
 
         public TypeInfo ConvertType(Type type)
         {
-            if (type.FullName != null && typesLookup.ContainsKey(type.FullName))
-                return typesLookup[type.FullName];
+            if ((type.FullName != null || type.Name != null) && typesLookup.ContainsKey(type.FullName ?? type.Name))
+                return typesLookup[type.FullName ?? type.Name];
             var typeInfo = new TypeInfo
             {
-                Name = type.FullName,
+                Name = type.FullName ?? type.Name,
                 Guid = Guid.NewGuid()
             };
             typesLookup[typeInfo.Name] = typeInfo;

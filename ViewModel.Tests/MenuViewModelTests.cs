@@ -165,7 +165,7 @@ namespace Tester
                 .Returns(fileMock);
 
             Mock.Get(fileMock)
-                .Setup(x => x.OpenWrite(It.IsAny<string>()))
+                .Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
                 .Returns(assemblyStream);
 
             var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
@@ -181,7 +181,7 @@ namespace Tester
             dialogServiceMock.Verify(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             Mock.Get(filesystemMock).Verify(
-                x => x.File.OpenWrite(It.Is<string>(y => y == @"F:\file.xml")),
+                x => x.File.Open(It.Is<string>(y => y == @"F:\file.xml"), It.Is<FileMode>(y => y == FileMode.Create)),
                 Times.Once);
 
             projectServiceMock.Verify(
