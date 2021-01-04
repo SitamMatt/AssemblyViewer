@@ -37,6 +37,7 @@ namespace ViewModel
         }
 
         public string Name => Root[0].Name;
+        public virtual Guid Guid => Root[0].Guid;
 
         public ObservableCollection<TreeNode> Root
         {
