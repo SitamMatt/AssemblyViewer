@@ -11,10 +11,8 @@ namespace Services.Tests
         [Test]
         public void CreateTest()
         {
-            var converter = new Mock<AssemblyConverter>();
-            var factory = new Mock<IAssemblyConverterFactory>();
-            factory.Setup(x => x.Create()).Returns(converter.Object);
-            Assert.IsInstanceOf(typeof(AssemblyConverter), factory.Object.Create());
+            var factory = new AssemblyConverterFactory();
+            Assert.IsInstanceOf(typeof(AssemblyConverter), factory.Create());
         }
     }
 }
