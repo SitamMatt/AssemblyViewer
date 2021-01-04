@@ -6,6 +6,7 @@ using Services.Data;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -55,17 +56,19 @@ namespace Services.Tests
         {
             var assembly = new Mock<Assembly>();
             var aInfo = new Mock<AssemblyInfo>();
-
             var pService = new ProjectsService();
             var importer = new Mock<IAssemblyImporter>();
+            var guid = Guid.NewGuid();
+
             importer.Setup(x => x.Import()).Returns(aInfo.Object);
+            aInfo.Setup(x => x.Guid).Returns(guid);
 
             pService.Import(importer.Object);
 
             Assert.AreEqual(pService.Projects.Count, 1);
             String pName = pService.Projects[0].Name;
 
-            pService.CloseProject(pName);
+            pService.CloseProject(guid);
 
             Assert.IsEmpty(pService.Projects);
         }

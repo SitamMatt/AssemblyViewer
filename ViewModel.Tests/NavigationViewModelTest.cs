@@ -19,17 +19,31 @@ namespace ViewModel.Tests
         public void CloseCommandExecute()
         {
             var projectServiceMock = new Mock<IProjectsService>();
-            var mainViewModelMock = new Mock<MainViewModel>();
+            var assemblyInfoServiceCreatorMock = new Mock<IAssemblyInfoServiceCreator>();
+            var assemblyInfoServiceMock = new Mock<IAssemblyInfoService>();
+            var treeVisitorMock = new Mock<ITreeConverterVisitor>();
+            var mainViewModelMock = new Mock<MainViewModel>(
+                assemblyInfoServiceMock.Object,
+                treeVisitorMock.Object,
+                null);
 
             var guid = Guid.NewGuid();
 
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>());
 
+            assemblyInfoServiceCreatorMock.Setup(x => x.Create(
+                It.IsAny<AssemblyInfo>()))
+                .Returns(assemblyInfoServiceMock.Object);
+
             mainViewModelMock.Setup(x => x.Guid)
                 .Returns(guid);
 
-            var vm = new NavigationViewModel(projectServiceMock.Object,null,null,null);
+            var vm = new NavigationViewModel(
+                projectServiceMock.Object,
+                assemblyInfoServiceCreatorMock.Object,
+                null,
+                null);
             Assert.False(vm.CloseTabCommand.CanExecute(null));
             Assert.True(vm.CloseTabCommand.CanExecute(mainViewModelMock.Object));
             vm.CloseTabCommand.Execute(mainViewModelMock.Object);

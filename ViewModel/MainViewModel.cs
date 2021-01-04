@@ -19,11 +19,6 @@ namespace ViewModel
 
         private ObservableCollection<TreeNode> _root;
 
-        public MainViewModel()
-        {
-
-        }
-
         public MainViewModel(IAssemblyInfoService assemblyInfoService, ITreeConverterVisitor treeConverterVisitor,
             ITreeItemsConverterVisitor itemsConverter)
         {
