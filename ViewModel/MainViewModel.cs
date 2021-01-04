@@ -19,6 +19,11 @@ namespace ViewModel
 
         private ObservableCollection<TreeNode> _root;
 
+        public MainViewModel()
+        {
+
+        }
+
         public MainViewModel(IAssemblyInfoService assemblyInfoService, ITreeConverterVisitor treeConverterVisitor,
             ITreeItemsConverterVisitor itemsConverter)
         {
@@ -37,7 +42,7 @@ namespace ViewModel
         }
 
         public string Name => Root[0].Name;
-        public Guid Guid => Root[0].Guid;
+        public virtual Guid Guid => Root[0].Guid;
 
         public ObservableCollection<TreeNode> Root
         {

@@ -15,11 +15,16 @@ namespace ViewModel
     {
         private readonly IProjectsService _projectService;
         private readonly IAssemblyInfoServiceCreator _assemblyInfoServiceCreator;
+        private readonly ITreeConverterVisitor treeConverterVisitor;
+        private readonly ITreeItemsConverterVisitor treeItemsConverterVisitor;
 
-        public NavigationViewModel(IProjectsService projectsService, IAssemblyInfoServiceCreator assemblyInfoServiceCreator)
+        public NavigationViewModel(IProjectsService projectsService, IAssemblyInfoServiceCreator assemblyInfoServiceCreator,
+            ITreeConverterVisitor treeConverterVisitor, ITreeItemsConverterVisitor treeItemsConverterVisitor)
         {
             _projectService = projectsService;
             _assemblyInfoServiceCreator = assemblyInfoServiceCreator;
+            this.treeConverterVisitor = treeConverterVisitor;
+            this.treeItemsConverterVisitor = treeItemsConverterVisitor;
             _projectService.Projects.CollectionChanged += ProjectsOnCollectionChanged;
             Tabs = new ObservableCollection<MainViewModel>();
             CloseTabCommand = new RelayCommand<MainViewModel>(ExecuteCloseTabCommand, CanExecuteCloseTabCommand);
@@ -43,8 +48,8 @@ namespace ViewModel
                 if (newItem is Project project)
                     Tabs.Add(new MainViewModel(
                         _assemblyInfoServiceCreator.Create(project.AssemblyInfo),
-                        SimpleIoc.Default.GetInstance<ITreeConverterVisitor>(),
-                        SimpleIoc.Default.GetInstance<ITreeItemsConverterVisitor>()
+                        treeConverterVisitor,
+                        treeItemsConverterVisitor
                     ));
             }
         }

@@ -28,12 +28,9 @@ namespace ViewModel
             this.assemblyConverterFactory = assemblyConverterFactory;
             ExitCommand = new RelayCommand(ExitCommandExecute, () => true);
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
-            CloseCommand = new RelayCommand(CloseCommandExecute, () => true);
             ExportXmlCommand = new RelayCommand(ExportXmlCommandExecute, () => true);
             ImportXmlCommand = new RelayCommand(ImportXmlCommandExecute, () => true);
         }
-
-        public RelayCommand CloseCommand { get; }
 
         public RelayCommand ExitCommand { get; }
 
@@ -42,8 +39,6 @@ namespace ViewModel
         public RelayCommand ImportXmlCommand { get; }
 
         public RelayCommand OpenCommand { get; }
-
-        protected void CloseCommandExecute() { }
 
         protected void ExitCommandExecute() => lifetimeService.Exit(0);
 
@@ -56,12 +51,12 @@ namespace ViewModel
             }
             var vm = new ProjectSelectDialogViewModel(projectService);
             var success = dialogService.ShowDialog(vm);
-            return;
+            if (!success) return;
             var project = vm.SelectedItem;
-            var success1 = dialogService.SaveFile("This Is The Title", "Text Documents (*.txt)|*.txt|All Files (*.*)|*.*");
-            if (success == true)
+            var filename = dialogService.SaveFile("This Is The Title", "Text Documents (*.txt)|*.txt|All Files (*.*)|*.*");
+            if (!string.IsNullOrEmpty(filename))
             {
-                using (var fs = fileSystem.File.OpenWrite(success1))
+                using (var fs = fileSystem.File.OpenWrite(filename))
                 {
                     projectService.Export(project.Guid, new XmlAssemblyExporter(fs));
                 }
