@@ -13,14 +13,9 @@
         <DockingManager DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
                         DocumentsSource="{Binding Tabs}"
                         ActiveContent="{Binding ActiveVM, Mode=TwoWay}">
-            <!-- <b:Interaction.Triggers> -->
-            <!--     <b:EventTrigger EventName="DocumentClosing"> -->
-            <!--         <b:InvokeCommandAction Command="{Binding CloseTabCommand}" CommandParameter="{Binding Content}" /> -->
-            <!--     </b:EventTrigger> -->
-            <!-- </b:Interaction.Triggers> -->
             <DockingManager.Resources>
                 <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
-                    <view:AssemblyView DataContext="{Binding }" />
+                    <view:AssemblyView DataContext="{Binding}" />
                 </DataTemplate>
             </DockingManager.Resources>
             <DockingManager.DocumentHeaderTemplate>

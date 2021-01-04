@@ -1,28 +1,203 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Moq;
+using NUnit.Framework;
+using Services;
+using Services.Data;
+using Services.Interfaces;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 
 namespace ViewModel.Tests
 {
     public class MenuViewModelTests
     {
+        private Stream assemblyStream;
+
+        [SetUp]
+        public void SetUp()
+        {
+            var source = @"
+namespace Tester
+{
+    public class A
+    {
+        public B b;
+    }
+
+    public class B
+    {
+        public A a;
+    }
+}";
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            CSharpCompilation compilation = CSharpCompilation.Create(
+                "assemblyName",
+                new[] { syntaxTree },
+                new[] { MetadataReference.CreateFromFile(typeof(object).Assembly.Location) },
+                new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            var ms = new MemoryStream();
+            var result = compilation.Emit(ms);
+            if (result.Success)
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+                assemblyStream = ms;
+            }
+        }
+
         [Test]
         public void ExitCommandTest()
         {
-            var vm = new MenuViewModel(null,null,null);
+            var lifetimeMock = new Mock<ILifetimeService>();
+            var vm = new MenuViewModel(null, null, lifetimeMock.Object, null, null);
             Assert.AreEqual(true, vm.ExitCommand.CanExecute(null));
+            vm.ExitCommand.Execute(null);
+            lifetimeMock.Verify(x => x.Exit(It.Is<int>(y => y == 0)));
         }
         
         [Test]
         public void CloseCommandTest()
         {
-            var vm = new MenuViewModel(null,null,null);
-            Assert.AreEqual(true, vm.CloseCommand.CanExecute(null));
+            //var vm = new MenuViewModel(null,null,null);
+            //Assert.AreEqual(true, vm.CloseCommand.CanExecute(null));
         }
         
         [Test]
         public void OpenCommandTest()
         {
-            var vm = new MenuViewModel(null,null,null);
+            var dialogServiceMock = new Mock<IDialogService>();
+            var filesystemMock = Mock.Of<IFileSystem>();
+            var fileMock = Mock.Of<IFile>();
+            var projectServiceMock = new Mock<IProjectsService>();
+            var assemblyConverterFactoryMock = new Mock<IAssemblyConverterFactory>();
+
+            dialogServiceMock.Setup(
+                x => x.OpenFile(
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(@"F:\file.dll");
+
+            Mock.Get(filesystemMock)
+                .Setup(x => x.File)
+                .Returns(fileMock);
+
+            Mock.Get(fileMock)
+                .Setup(x => x.OpenRead(It.IsAny<string>()))
+                .Returns(assemblyStream);
+
+
+            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, assemblyConverterFactoryMock.Object);
+            
             Assert.AreEqual(true, vm.OpenCommand.CanExecute(null));
+
+            vm.OpenCommand.Execute(null);
+
+            dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            
+            Mock.Get(filesystemMock).Verify(
+                x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
+                Times.Once);
+
+            projectServiceMock.Verify(
+                x => x.Import(
+                    It.IsAny<DllAssemblyImporter>()),
+                Times.Once);
+        }
+
+        [Test]
+        public void ExportXmlCommandTest()
+        {
+            var dialogServiceMock = new Mock<IDialogService>();
+            var filesystemMock = Mock.Of<IFileSystem>();
+            var fileMock = Mock.Of<IFile>();
+            var projectServiceMock = new Mock<IProjectsService>();
+
+            projectServiceMock.Setup(x => x.Projects)
+                .Returns(new ObservableCollection<Project>());
+
+            //dialogServiceMock.Setup(
+            //    x => x.OpenFile(
+            //        It.IsAny<string>(),
+            //        It.IsAny<string>())
+            //    )
+            //    .Returns(@"F:\file.dll");
+
+            //Mock.Get(filesystemMock)
+            //    .Setup(x => x.File)
+            //    .Returns(fileMock);
+
+            //Mock.Get(fileMock)
+            //    .Setup(x => x.OpenRead(It.IsAny<string>()))
+            //    .Returns(assemblyStream);
+
+
+            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+
+            Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
+
+            vm.ExportXmlCommand.Execute(null);
+
+            projectServiceMock.Verify(x => x.Projects);
+
+            dialogServiceMock.Verify(x => x.ShowWarning(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            //Mock.Get(filesystemMock).Verify(
+            //    x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
+            //    Times.Once);
+
+            //projectServiceMock.Verify(
+            //    x => x.Import(
+            //        It.IsAny<XmlAssemblyImporter>()),
+            //    Times.Once);
+        }
+
+        [Test]
+        public void ImportXmlCommandTest()
+        {
+            var dialogServiceMock = new Mock<IDialogService>();
+            var filesystemMock = Mock.Of<IFileSystem>();
+            var fileMock = Mock.Of<IFile>();
+            var projectServiceMock = new Mock<IProjectsService>();
+
+            dialogServiceMock.Setup(
+                x => x.OpenFile(
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(@"F:\file.dll");
+
+            Mock.Get(filesystemMock)
+                .Setup(x => x.File)
+                .Returns(fileMock);
+
+            Mock.Get(fileMock)
+                .Setup(x => x.OpenRead(It.IsAny<string>()))
+                .Returns(assemblyStream);
+
+
+            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+
+            Assert.AreEqual(true, vm.ImportXmlCommand.CanExecute(null));
+
+            vm.ImportXmlCommand.Execute(null);
+
+            dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            Mock.Get(filesystemMock).Verify(
+                x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
+                Times.Once);
+
+            projectServiceMock.Verify(
+                x => x.Import(
+                    It.IsAny<XmlAssemblyImporter>()),
+                Times.Once);
         }
     }
 }

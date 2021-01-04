@@ -1,8 +1,9 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Model.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using Services.Interfaces;
 using ViewModel.Data;
 using ViewModel.Visitors;
 
@@ -25,7 +26,7 @@ namespace ViewModel.Tests
             rootNode = new TreeNode
             {
                 Name = "Root",
-                Hash = 5,
+                Guid = Guid.NewGuid(),
                 Children = new ObservableCollection<TreeNode> {dummyNode}
             };
             externalNode = new TreeNode {Name = "External"};

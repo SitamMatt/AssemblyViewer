@@ -1,14 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System;
-using System.Linq;
-using MvvmDialogs;
 using GalaSoft.MvvmLight.Ioc;
-using MvvmDialogs.FrameworkDialogs.SaveFile;
-using MvvmDialogs.FrameworkDialogs.OpenFile;
-using Services.Interfaces;
 using Services;
+using Services.Interfaces;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Runtime.Loader;
 
 namespace ViewModel
@@ -19,13 +15,17 @@ namespace ViewModel
         private readonly IDialogService dialogService;
         private readonly ILifetimeService lifetimeService;
         private readonly IFileSystem fileSystem;
+        private readonly IAssemblyConverterFactory assemblyConverterFactory;
 
-        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService, ILifetimeService lifetimeService, IFileSystem fileSystem)
+        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService,
+            ILifetimeService lifetimeService, IFileSystem fileSystem,
+            IAssemblyConverterFactory assemblyConverterFactory)
         {
             this.projectService = projectsService;
             this.dialogService = dialogService;
             this.lifetimeService = lifetimeService;
             this.fileSystem = fileSystem;
+            this.assemblyConverterFactory = assemblyConverterFactory;
             ExitCommand = new RelayCommand(ExitCommandExecute, () => true);
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
             CloseCommand = new RelayCommand(CloseCommandExecute, () => true);
@@ -51,44 +51,30 @@ namespace ViewModel
         {
             if (projectService.Projects.IsEmpty())
             {
-                //dialogService.ShowMessageBox(this, "No projects opened", "No available projects to select", MessageBoxButton.OK, MessageBoxImage.Warning);
+                dialogService.ShowWarning("No available projects to select", "No projects opened");
                 return;
             }
-            var vm = SimpleIoc.Default.GetInstance<ProjectSelectDialogViewModel>();
-            var success = dialogService.ShowDialog(this, vm);
+            var vm = new ProjectSelectDialogViewModel(projectService);
+            var success = dialogService.ShowDialog(vm);
+            return;
             var project = vm.SelectedItem;
-            var settings = new SaveFileDialogSettings
-            {
-                Title = "This Is The Title",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                Filter = "Text Documents (*.txt)|*.txt|All Files (*.*)|*.*",
-                CheckFileExists = false
-            };
-            var success1 = dialogService.ShowSaveFileDialog(this, settings);
+            var success1 = dialogService.SaveFile("This Is The Title", "Text Documents (*.txt)|*.txt|All Files (*.*)|*.*");
             if (success == true)
             {
-                projectService.Export(project.Guid, new XmlAssemblyExporter(settings.FileName));
+                using (var fs = fileSystem.File.OpenWrite(success1))
+                {
+                    projectService.Export(project.Guid, new XmlAssemblyExporter(fs));
+                }
+                dialogService.ShowInfo("Project succesfully exported", "Success");
             }
-            //dialogService.ShowMessageBox(
-            //    this,
-            //    "This is the text.",
-            //    "This Is The Caption",
-            //    MessageBoxButton.OK,
-            //    MessageBoxImage.Information);
         }
 
         protected void ImportXmlCommandExecute()
         {
-            var settings = new OpenFileDialogSettings
+            var success = dialogService.OpenFile("Select xml file to load", "XML files (*.xml)|*.xml");
+            if (!string.IsNullOrEmpty(success))
             {
-                Title = "Select xml file to load",
-                Filter = "XML files (*.xml)|*.xml",
-                CheckFileExists = true,
-            };
-            var success = dialogService.ShowOpenFileDialog(this, settings);
-            if (success == true)
-            {
-                using (var file = fileSystem.File.OpenRead(settings.FileName))
+                using (var file = fileSystem.File.OpenRead(success))
                 {
                     projectService.Import(new XmlAssemblyImporter(file));
                 }
@@ -97,21 +83,15 @@ namespace ViewModel
 
         protected void OpenCommandExecute()
         {
-            var settings = new OpenFileDialogSettings
+            var success = dialogService.OpenFile("Select assembly file to load", "Dll files (*.dll)|*.dll");
+            if (!string.IsNullOrEmpty(success))
             {
-                Title = "Select assembly file to load",
-                Filter = "Dll files (*.dll)|*.dll",
-                CheckFileExists = true,
-            };
-            var success = dialogService.ShowOpenFileDialog(this, settings);
-            if (success == true)
-            {
-                using (var file = fileSystem.File.OpenRead(settings.FileName))
+                using (var file = fileSystem.File.OpenRead(success))
                 {
                     var stream = AssemblyLoadContext.Default.LoadFromStream(file);
                     projectService.Import(new DllAssemblyImporter(
                     stream,
-                    SimpleIoc.Default.GetInstance<IAssemblyConverter>()));
+                    assemblyConverterFactory.Create()));
                 }
             }
         }

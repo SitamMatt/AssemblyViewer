@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:services="clr-namespace:Services.Data;assembly=Services"
-        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
@@ -18,7 +18,21 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Margin="0,5,0,5" Content="Ok" Command="{Binding SubmitCommand}"/>
-        <Button Margin="0,5,0,5" Content="Cancel" Command="{Binding CancelCommand}"/>
+        <Button Margin="0,5,0,5" Content="Ok">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="Click">
+                    <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" PropertyName="DialogResult" Value="true"/>
+                    <b:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </Button>
+        <Button Margin="0,5,0,5" Content="Cancel" Command="{Binding CancelCommand}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="Click">
+                    <b:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" PropertyName="DialogResult" Value="false"/>
+                    <b:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </Button>
     </StackPanel>
 </Window>

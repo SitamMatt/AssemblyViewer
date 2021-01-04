@@ -1,11 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
 using ViewModel.Visitors;
 using ViewModel;
-using MvvmDialogs;
 using Services;
 using Services.Interfaces;
 using Services.Factory;
 using System.IO.Abstractions;
+using Services.Wpf;
 
 namespace View
 {
@@ -28,7 +28,12 @@ namespace View
             SimpleIoc.Default.Register<ILifetimeService, LifetimeService>();
             SimpleIoc.Default.Register<IAssemblyConverter, AssemblyConverter>();
             SimpleIoc.Default.Register<IFileSystem, FileSystem>();
-            SimpleIoc.Default.Register<IDialogService>(() => new DialogService(dialogTypeLocator: new DialogLocator()));
+            SimpleIoc.Default.Register<IAssemblyConverterFactory, AssemblyConverterFactory>();
+            SimpleIoc.Default.Register<IDialogService>(() => {
+                var service = new WpfDialogService();
+                service.RegisterDialog<ProjectSelectDialog, ProjectSelectDialogViewModel>();
+                return service;
+            });
         }
 
         public MainViewModel MainViewModel
