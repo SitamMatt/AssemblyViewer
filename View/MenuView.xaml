@@ -17,7 +17,6 @@
             <MenuItem Header="_Export">
                 <MenuItem Header="_XML" Command="{Binding ExportXmlCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Close" Command="{Binding CloseCommand}" />
             <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
         </MenuItem>
         <MenuItem Header="About">

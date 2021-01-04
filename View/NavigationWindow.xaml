@@ -5,14 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
-        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel"
-
-        Title="NavigationWindow" Height="450" Width="800">
+        xmlns:converters="clr-namespace:View.Converters"
+        xmlns:viewModel="clr-namespace:ViewModel;assembly=ViewModel" xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        Title="NavigationWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=viewModel:MainViewModel, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <converters:DocumentClosingEventsConverter x:Key="DocumentClosingEventsConverter"/>
+    </Window.Resources>
     <DockPanel>
         <view:MenuView DockPanel.Dock="Top" />
         <DockingManager DataContext="{Binding NavigationViewModel, Source={StaticResource Locator}}"
-                        DocumentsSource="{Binding Tabs}"
-                        ActiveContent="{Binding ActiveVM, Mode=TwoWay}">
+                        DocumentsSource="{Binding Tabs}">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="DocumentClosed">
+                    <b:InvokeCommandAction Command="{Binding CloseTabCommand}" EventArgsConverter="{StaticResource DocumentClosingEventsConverter}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
             <DockingManager.Resources>
                 <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
                     <view:AssemblyView DataContext="{Binding}" />

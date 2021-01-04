@@ -7,7 +7,7 @@ namespace Services.Interfaces
     public interface IProjectsService
     {
         ObservableCollection<Project> Projects { get; }
-        void CloseProject(string projectName);
+        void CloseProject(Guid projectGuid);
         void Export(Guid projectGuid, IAssemblyExporter exporter);
         void Import(IAssemblyImporter importer);
     }
