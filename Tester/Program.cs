@@ -10,10 +10,16 @@ namespace Tester
     public class Program
     {
         public int prop;
+
+        public int Prop { get; set; }
+        public int ReadProp { get; }
         
         static void Main(string[] args)
         {
             var asm = Assembly.GetExecutingAssembly();
+            System.Reflection.PropertyInfo[] props = typeof(Program).GetProperties();
+            var p = props[0];
+            var p1 = props[1];
             //var info = new Converter().Convert(asm);
             //IExtendedXmlSerializer serializer = new ConfigurationContainer()
             //    .UseAutoFormatting()

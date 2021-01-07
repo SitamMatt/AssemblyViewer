@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Model.Data;
 using Services.Interfaces;
 using FieldInfo = Model.Data.FieldInfo;
@@ -14,7 +13,7 @@ namespace Services
         protected Dictionary<string, TypeInfo> typesLookup = new Dictionary<string, TypeInfo>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
 
-        public AssemblyInfo Convert(Assembly assembly)
+        public AssemblyInfo Convert(System.Reflection.Assembly assembly)
         {
             AssemblyInfo assemblyInfo = new AssemblyInfo
             {
@@ -27,7 +26,7 @@ namespace Services
             return assemblyInfo;
         }
 
-        public ModuleInfo ConvertModule(Module module)
+        public ModuleInfo ConvertModule(System.Reflection.Module module)
         {
             var moduleInfo = new ModuleInfo
             {
@@ -51,6 +50,7 @@ namespace Services
             typesLookup[typeInfo.Name] = typeInfo;
             nodesLookup[typeInfo.Guid] = typeInfo;
             typeInfo.Fields = type.GetFields().Select(ConvertField).ToList();
+            typeInfo.Properties = type.GetProperties().Select(ConvertProperty).ToList();
             return typeInfo;
         }
 
@@ -66,6 +66,22 @@ namespace Services
             };
             nodesLookup[fieldInfo.Guid] = fieldInfo;
             return fieldInfo;
+        }
+
+        public PropertyInfo ConvertProperty(System.Reflection.PropertyInfo property)
+        {
+            var propertyInfo = new PropertyInfo
+            {
+                Name = property.Name,
+                Attributes = property.Attributes,
+                DeclaringType = typesLookup[property.DeclaringType.FullName],
+                HasGetter = property.CanRead,
+                HasSetter = property.CanWrite,
+                Type = ConvertType(property.PropertyType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[propertyInfo.Guid] = propertyInfo;
+            return propertyInfo;
         }
     }
 }

@@ -53,7 +53,9 @@ namespace ViewModel.Visitors
 
         public void Handle(PropertyInfo propertyInfo)
         {
-            
+            var result = createBasicNode(propertyInfo);
+            result.Children = new ObservableCollection<TreeNode> { DummyTreeNode };
+            Result = result;
         }
 
         public void Handle(ModuleInfo moduleInfo)

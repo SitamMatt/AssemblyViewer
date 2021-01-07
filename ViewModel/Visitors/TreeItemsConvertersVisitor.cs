@@ -31,9 +31,14 @@ namespace ViewModel.Visitors
         public void Handle(TypeInfo typeInfo)
         {
             var col = new ObservableCollection<TreeNode>();
-            foreach (var moduleInfo in typeInfo.Fields)
+            foreach (var field in typeInfo.Fields)
             {
-                moduleInfo.Accept(_treeItemConverter);
+                field.Accept(_treeItemConverter);
+                col.Add(_treeItemConverter.Result);
+            }
+            foreach (var property in typeInfo.Properties)
+            {
+                property.Accept(_treeItemConverter);
                 col.Add(_treeItemConverter.Result);
             }
 
@@ -62,6 +67,10 @@ namespace ViewModel.Visitors
 
         public void Handle(PropertyInfo propertyInfo)
         {
+            var col = new ObservableCollection<TreeNode>();
+            propertyInfo.Type.Accept(_treeItemConverter);
+            col.Add(_treeItemConverter.Result);
+            Result = col;
         }
 
         public void Handle(ModuleInfo moduleInfo)
