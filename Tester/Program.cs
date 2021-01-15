@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using ExtendedXmlSerializer;
@@ -7,13 +8,22 @@ using Model.Data;
 
 namespace Tester
 {
+    [Serializable]
     public class Program
     {
         public int prop;
+
+        public int Prop { get; set; }
+        public int ReadProp { get; }
+
+        public void Method(int arg1) { }
         
         static void Main(string[] args)
         {
             var asm = Assembly.GetExecutingAssembly();
+            System.Reflection.PropertyInfo[] props = typeof(Program).GetProperties();
+            var p = props[0];
+            var p1 = props[1];
             //var info = new Converter().Convert(asm);
             //IExtendedXmlSerializer serializer = new ConfigurationContainer()
             //    .UseAutoFormatting()

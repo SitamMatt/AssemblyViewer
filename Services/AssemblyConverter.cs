@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Model.Data;
 using Services.Interfaces;
 using FieldInfo = Model.Data.FieldInfo;
@@ -14,7 +13,7 @@ namespace Services
         protected Dictionary<string, TypeInfo> typesLookup = new Dictionary<string, TypeInfo>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
 
-        public AssemblyInfo Convert(Assembly assembly)
+        public AssemblyInfo Convert(System.Reflection.Assembly assembly)
         {
             AssemblyInfo assemblyInfo = new AssemblyInfo
             {
@@ -27,7 +26,7 @@ namespace Services
             return assemblyInfo;
         }
 
-        public ModuleInfo ConvertModule(Module module)
+        public ModuleInfo ConvertModule(System.Reflection.Module module)
         {
             var moduleInfo = new ModuleInfo
             {
@@ -51,7 +50,51 @@ namespace Services
             typesLookup[typeInfo.Name] = typeInfo;
             nodesLookup[typeInfo.Guid] = typeInfo;
             typeInfo.Fields = type.GetFields().Select(ConvertField).ToList();
+            typeInfo.Properties = type.GetProperties().Select(ConvertProperty).ToList();
+            typeInfo.Methods = type.GetMethods().Select(ConvertMethod).ToList();
+            typeInfo.Constructors = type.GetConstructors().Select(ConvertConstructor).ToList();
             return typeInfo;
+        }
+
+        private ConstructorInfo ConvertConstructor(System.Reflection.ConstructorInfo constructor)
+        {
+            var info = new ConstructorInfo
+            {
+                Name = constructor.Name,
+                Attributes = constructor.Attributes,
+                DeclaringType = ConvertType(constructor.DeclaringType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            info.Parameters = constructor.GetParameters().Select(ConvertParameter).ToList();
+            return info;
+        }
+
+        public MethodInfo ConvertMethod(System.Reflection.MethodInfo method)
+        {
+            var info = new MethodInfo
+            {
+                Name = method.Name,
+                Attributes = method.Attributes,
+                DeclaringType = ConvertType(method.DeclaringType),
+                ReturnType = ConvertType(method.ReturnType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            info.Parameters = method.GetParameters().Select(ConvertParameter).ToList();
+            return info;
+        }
+
+        public ParameterInfo ConvertParameter(System.Reflection.ParameterInfo parameter)
+        {
+            var info = new ParameterInfo
+            {
+                Name = parameter.Name,
+                Type = ConvertType(parameter.ParameterType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            return info;
         }
 
         public FieldInfo ConvertField(System.Reflection.FieldInfo field)
@@ -60,12 +103,29 @@ namespace Services
             {
                 Name = field.Name,
                 Attributes = field.Attributes,
-                DeclaringType = typesLookup[field.DeclaringType.FullName],
+                DeclaringType = ConvertType(field.DeclaringType),
                 Type = ConvertType(field.FieldType),
                 Guid = Guid.NewGuid()
             };
             nodesLookup[fieldInfo.Guid] = fieldInfo;
             return fieldInfo;
         }
+
+        public PropertyInfo ConvertProperty(System.Reflection.PropertyInfo property)
+        {
+            var propertyInfo = new PropertyInfo
+            {
+                Name = property.Name,
+                Attributes = property.Attributes,
+                DeclaringType = ConvertType(property.DeclaringType),
+                HasGetter = property.CanRead,
+                HasSetter = property.CanWrite,
+                Type = ConvertType(property.PropertyType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[propertyInfo.Guid] = propertyInfo;
+            return propertyInfo;
+        }
+
     }
 }

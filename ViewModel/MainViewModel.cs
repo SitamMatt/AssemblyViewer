@@ -53,11 +53,15 @@ namespace ViewModel
 
         private void ExecuteExpandCommand(TreeNode node)
         {
+            var h = _nodesList.Contains(node);
             if (!_nodesList.Contains(node)) return;
-            _assemblyInfoService.Accept(node.Guid, _childrenConverter);
-            node.Children.Clear();
-            node.Children.AddRange(_childrenConverter.Result);
-            _nodesList.AddRange(_childrenConverter.Result);
+            if (node.Guid != Guid.Empty)
+            {
+                _assemblyInfoService.Accept(node.Guid, _childrenConverter);
+                node.Children.Clear();
+                node.Children.AddRange(_childrenConverter.Result);
+            }
+            _nodesList.AddRange(node.Children);
         }
     }
 }
