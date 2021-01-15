@@ -51,7 +51,50 @@ namespace Services
             nodesLookup[typeInfo.Guid] = typeInfo;
             typeInfo.Fields = type.GetFields().Select(ConvertField).ToList();
             typeInfo.Properties = type.GetProperties().Select(ConvertProperty).ToList();
+            typeInfo.Methods = type.GetMethods().Select(ConvertMethod).ToList();
+            typeInfo.Constructors = type.GetConstructors().Select(ConvertConstructor).ToList();
             return typeInfo;
+        }
+
+        private ConstructorInfo ConvertConstructor(System.Reflection.ConstructorInfo constructor)
+        {
+            var info = new ConstructorInfo
+            {
+                Name = constructor.Name,
+                Attributes = constructor.Attributes,
+                DeclaringType = ConvertType(constructor.DeclaringType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            info.Parameters = constructor.GetParameters().Select(ConvertParameter).ToList();
+            return info;
+        }
+
+        public MethodInfo ConvertMethod(System.Reflection.MethodInfo method)
+        {
+            var info = new MethodInfo
+            {
+                Name = method.Name,
+                Attributes = method.Attributes,
+                DeclaringType = ConvertType(method.DeclaringType),
+                ReturnType = ConvertType(method.ReturnType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            info.Parameters = method.GetParameters().Select(ConvertParameter).ToList();
+            return info;
+        }
+
+        public ParameterInfo ConvertParameter(System.Reflection.ParameterInfo parameter)
+        {
+            var info = new ParameterInfo
+            {
+                Name = parameter.Name,
+                Type = ConvertType(parameter.ParameterType),
+                Guid = Guid.NewGuid()
+            };
+            nodesLookup[info.Guid] = info;
+            return info;
         }
 
         public FieldInfo ConvertField(System.Reflection.FieldInfo field)
@@ -60,7 +103,7 @@ namespace Services
             {
                 Name = field.Name,
                 Attributes = field.Attributes,
-                DeclaringType = typesLookup[field.DeclaringType.FullName],
+                DeclaringType = ConvertType(field.DeclaringType),
                 Type = ConvertType(field.FieldType),
                 Guid = Guid.NewGuid()
             };
@@ -74,7 +117,7 @@ namespace Services
             {
                 Name = property.Name,
                 Attributes = property.Attributes,
-                DeclaringType = typesLookup[property.DeclaringType.FullName],
+                DeclaringType = ConvertType(property.DeclaringType),
                 HasGetter = property.CanRead,
                 HasSetter = property.CanWrite,
                 Type = ConvertType(property.PropertyType),
@@ -83,5 +126,6 @@ namespace Services
             nodesLookup[propertyInfo.Guid] = propertyInfo;
             return propertyInfo;
         }
+
     }
 }
