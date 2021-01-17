@@ -181,10 +181,12 @@ namespace ViewModel.Visitors
         public object Handle(AttributeInfo info)
         {
             var children = new ObservableCollection<TreeNode>();
-            info.TypeInfo.Accept(_treeItemConverter);
-            children.Add(_treeItemConverter.Result);
-            info.ConstructorInfo.Accept(_treeItemConverter);
-            children.Add(_treeItemConverter.Result);
+            children.AddIfNotNull(CreateCategory("Type", info.Type));
+            //info.Type.Accept(_treeItemConverter);
+            //children.Add(_treeItemConverter.Result);
+            children.AddIfNotNull(CreateCategory("Constructor", info.ConstructorInfo));
+            //info.ConstructorInfo.Accept(_treeItemConverter);
+            //children.Add(_treeItemConverter.Result);
             Result = children;
             return children;
         }

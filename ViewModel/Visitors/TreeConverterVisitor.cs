@@ -95,7 +95,8 @@ namespace ViewModel.Visitors
         public object Handle(AttributeInfo moduleInfo)
         {
             var result = CreateBasicNode(moduleInfo);
-            result.Children = new ObservableCollection<TreeNode> { DummyTreeNode };
+            if(moduleInfo.ConstructorInfo != null || moduleInfo.Type != null)
+                result.Children = new ObservableCollection<TreeNode> { DummyTreeNode };
             Result = result;
             return result;
         }

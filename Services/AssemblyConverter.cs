@@ -11,19 +11,25 @@ namespace Services
     public class AssemblyConverter : IAssemblyConverter
     {
         protected Dictionary<Type, TypeInfo> typesLookup = new Dictionary<Type, TypeInfo>();
+        protected Dictionary<Guid, AsmComponent> localNodesLookup = new Dictionary<Guid, AsmComponent>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
+        protected List<AsmComponent> localNodes = new List<AsmComponent>();
+        protected System.Reflection.Assembly localAssembly;
+
 
         public AssemblyInfo Convert(System.Reflection.Assembly assembly)
         {
+            localAssembly = assembly;
             AssemblyInfo info = new AssemblyInfo
             {
                 Name = assembly.FullName,
                 Guid = Guid.NewGuid(),
-                Lookup = nodesLookup,
+                Lookup = localNodesLookup,
                 Modules = assembly.Modules.Select(ConvertModule).ToList(),
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.CustomAttributes = assembly.CustomAttributes.Select(ConvertAttribute).ToList();
+            info.LocalNodes = localNodes;
             return info;
         }
 
@@ -35,12 +41,12 @@ namespace Services
                 Types = module.GetTypes().Select(ConvertType).ToList(),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.CustomAttributes = module.CustomAttributes.Select(ConvertAttribute).ToList();
             return info;
         }
 
-        public TypeInfo ConvertType(Type type)
+        public TypeInfo ConvertTypeForeign(Type type)
         {
             if (typesLookup.ContainsKey(type)) return typesLookup[type];
             var info = new TypeInfo
@@ -49,7 +55,34 @@ namespace Services
                 Guid = Guid.NewGuid()
             };
             typesLookup[type] = info;
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
+            localNodes.Add(info);
+            info.Attributes = type.Attributes;
+            info.Fields = type.GetFields().Select(ConvertField).ToList();
+            localNodes.AddRange(info.Fields);
+            info.Properties = type.GetProperties().Select(ConvertProperty).ToList();
+            localNodes.AddRange(info.Properties);
+            info.Methods = type.GetMethods().Select(ConvertMethod).ToList();
+            localNodes.AddRange(info.Methods);
+            info.Constructors = type.GetConstructors().Select(ConvertConstructor).ToList();
+            localNodes.AddRange(info.Constructors);
+            info.CustomAttributes = type.CustomAttributes.Select(ConvertAttribute).ToList();
+            info.NestedTypes = type.GetNestedTypes().Select(ConvertType).ToList();
+            localNodes.AddRange(info.NestedTypes);
+            return info;
+        }
+
+        public TypeInfo ConvertType(Type type)
+        {
+            if (typesLookup.ContainsKey(type)) return typesLookup[type];
+            if (type.Assembly != localAssembly) return new TypeInfo { Name = type.Name };
+            var info = new TypeInfo
+            {
+                Name = type.Name,
+                Guid = Guid.NewGuid()
+            };
+            typesLookup[type] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = type.Attributes;
             info.Fields = type.GetFields().Select(ConvertField).ToList();
             info.Properties = type.GetProperties().Select(ConvertProperty).ToList();
@@ -69,7 +102,7 @@ namespace Services
                 DeclaringType = ConvertType(constructor.DeclaringType),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = constructor.Attributes;
             info.Parameters = constructor.GetParameters().Select(ConvertParameter).ToList();
             info.CustomAttributes = constructor.CustomAttributes.Select(ConvertAttribute).ToList();
@@ -86,7 +119,7 @@ namespace Services
                 ReturnType = ConvertType(method.ReturnType),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = method.Attributes;
             info.Parameters = method.GetParameters().Select(ConvertParameter).ToList();
             info.CustomAttributes = method.CustomAttributes.Select(ConvertAttribute).ToList();
@@ -101,7 +134,7 @@ namespace Services
                 Type = ConvertType(parameter.ParameterType),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = parameter.Attributes;
             info.CustomAttributes = parameter.CustomAttributes.Select(ConvertAttribute).ToList();
             return info;
@@ -117,7 +150,7 @@ namespace Services
                 Type = ConvertType(field.FieldType),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = field.Attributes;
             info.CustomAttributes = field.CustomAttributes.Select(ConvertAttribute).ToList();
             return info;
@@ -135,7 +168,7 @@ namespace Services
                 Type = ConvertType(property.PropertyType),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             info.Attributes = property.Attributes;
             info.CustomAttributes = property.CustomAttributes.Select(ConvertAttribute).ToList();
             return info;
@@ -143,14 +176,15 @@ namespace Services
 
         public AttributeInfo ConvertAttribute(System.Reflection.CustomAttributeData attribute)
         {
+            if (attribute.AttributeType.Assembly != localAssembly) return new AttributeInfo { Name = attribute.AttributeType.Name };
             var info = new AttributeInfo
             {
                 Name = attribute.AttributeType.Name,
-                TypeInfo = ConvertType(attribute.AttributeType),
+                Type = ConvertType(attribute.AttributeType),
                 ConstructorInfo = ConvertConstructor(attribute.Constructor),
                 Guid = Guid.NewGuid()
             };
-            nodesLookup[info.Guid] = info;
+            localNodesLookup[info.Guid] = info;
             return info;
         }
     }

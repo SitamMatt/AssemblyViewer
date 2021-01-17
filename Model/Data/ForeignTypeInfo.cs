@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace Model.Data
 {
-    public class AttributeInfo : AsmComponent
+    public class ForeignTypeInfo : AsmComponent
     {
-        public TypeInfo Type { get; set; }
-        public ConstructorInfo ConstructorInfo { get; set; }
         public override object Accept(IVisitor visitor)
         {
-            return visitor.Handle(this);
+            throw new NotImplementedException();
         }
     }
 }
