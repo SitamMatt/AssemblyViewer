@@ -5,9 +5,9 @@ namespace Model.Data
 {
     public class ModuleInfo : AsmComponent
     {
-        public override void Accept(IVisitor visitor)
+        public override object Accept(IVisitor visitor)
         {
-            visitor.Handle(this);
+            return visitor.Handle(this);
         }
 
         public List<TypeInfo> Types { get; set; }

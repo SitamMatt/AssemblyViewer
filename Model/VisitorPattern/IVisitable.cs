@@ -2,6 +2,6 @@
 {
     public interface IVisitable
     {
-        void Accept(IVisitor visitor);
+        object Accept(IVisitor visitor);
     }
 }

@@ -12,5 +12,11 @@ namespace Common.Extensions
                 source.Add(item);
             }
         }
+
+        public static void AddIfNotNull<T>(this ObservableCollection<T> source, T item)
+        {
+            if (item == null) return;
+            source.Add(item);
+        }
     }
 }
