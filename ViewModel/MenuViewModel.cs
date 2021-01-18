@@ -20,18 +20,30 @@ namespace ViewModel
 
         public MenuViewModel(IProjectsService projectsService, IDialogService dialogService,
             ILifetimeService lifetimeService, IFileSystem fileSystem,
-            IAssemblyConverterFactory assemblyConverterFactory)
+            IAssemblyConverterFactory assemblyConverterFactory, SaveFile saveFileDelegate, Warn warnDelegate, Inform informDelegate, OpenFile openFileDelegate,
+            ShowSelectBox showSelectBoxDelegate)
         {
             this.projectService = projectsService;
             this.dialogService = dialogService;
             this.lifetimeService = lifetimeService;
             this.fileSystem = fileSystem;
             this.assemblyConverterFactory = assemblyConverterFactory;
+            this.saveFileDelegate = saveFileDelegate;
+            this.warnDelegate = warnDelegate;
+            this.informDelegate = informDelegate;
+            this.openFileDelegate = openFileDelegate;
+            this.showSelectBoxDelegate = showSelectBoxDelegate;
             ExitCommand = new RelayCommand(ExitCommandExecute, () => true);
             OpenCommand = new RelayCommand(OpenCommandExecute, () => true);
             ExportXmlCommand = new RelayCommand(ExportXmlCommandExecute, () => true);
             ImportXmlCommand = new RelayCommand(ImportXmlCommandExecute, () => true);
         }
+
+        private readonly SaveFile saveFileDelegate;
+        private readonly Warn warnDelegate;
+        private readonly Inform informDelegate;
+        private readonly OpenFile openFileDelegate;
+        private readonly ShowSelectBox showSelectBoxDelegate;
 
         public RelayCommand ExitCommand { get; }
 
@@ -47,27 +59,25 @@ namespace ViewModel
         {
             if (projectService.Projects.IsEmpty())
             {
-                dialogService.ShowWarning("No available projects to select", "No projects opened");
+                warnDelegate("No available projects to select");
                 return;
             }
-            var vm = new ProjectSelectDialogViewModel(projectService);
-            var success = dialogService.ShowDialog(vm);
-            if (!success) return;
-            var project = vm.SelectedItem;
-            var filename = dialogService.SaveFile("Select xml file to save", "XML files (*.xml)|*.xml");
+            var project = showSelectBoxDelegate(new ProjectSelectDialogViewModel(projectService));
+            if (project == null) return;
+            var filename = saveFileDelegate("Select xml file to save", "XML files (*.xml)|*.xml");
             if (!string.IsNullOrEmpty(filename))
             {
                 using (var fs = fileSystem.File.Open(filename, FileMode.Create))
                 {
                     projectService.Export(project.Guid, new XmlAssemblyExporter(fs));
                 }
-                dialogService.ShowInfo("Project succesfully exported", "Success");
+                informDelegate("Project succesfully exported");
             }
         }
 
         protected void ImportXmlCommandExecute()
         {
-            var success = dialogService.OpenFile("Select xml file to load", "XML files (*.xml)|*.xml");
+            var success = openFileDelegate("Select xml file to load", "XML files (*.xml)|*.xml");
             if (!string.IsNullOrEmpty(success))
             {
                 using (var file = fileSystem.File.OpenRead(success))
@@ -79,7 +89,7 @@ namespace ViewModel
 
         protected void OpenCommandExecute()
         {
-            var success = dialogService.OpenFile("Select assembly file to load", "Dll files (*.dll)|*.dll");
+            var success = openFileDelegate("Select assembly file to load", "Dll files (*.dll)|*.dll");
             if (!string.IsNullOrEmpty(success))
             {
                 using (var file = fileSystem.File.OpenRead(success))

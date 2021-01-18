@@ -6,6 +6,9 @@ using Services.Interfaces;
 using Services.Factory;
 using System.IO.Abstractions;
 using Services.Wpf;
+using Microsoft.Win32;
+using static ViewModel.MenuViewModel;
+using System.Windows;
 
 namespace View
 {
@@ -18,6 +21,61 @@ namespace View
             SimpleIoc.Default.Register<NavigationViewModel>();
             SimpleIoc.Default.Register<MenuViewModel>();
             SimpleIoc.Default.Register<ProjectSelectDialogViewModel>();
+
+            SimpleIoc.Default.Register<SaveFile>(() =>
+            {
+                return (t, f) =>
+                {
+                    var dialog = new SaveFileDialog
+                    {
+                        Title = t,
+                        Filter = f,
+                    };
+                    var result = dialog.ShowDialog();
+                    return result == true ? dialog.FileName : null;
+                };
+            });
+            SimpleIoc.Default.Register<OpenFile>(() =>
+            {
+                return (t, f) =>
+                {
+                    var dialog = new OpenFileDialog
+                    {
+                        Title = t,
+                        Filter = f,
+                        CheckFileExists = true
+                    };
+                    var result = dialog.ShowDialog();
+                    return result == true ? dialog.FileName : null;
+                };
+            });
+            SimpleIoc.Default.Register<Warn>(() =>
+            {
+                return (t) => MessageBox.Show(
+                    t,
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            });
+            SimpleIoc.Default.Register<Inform>(() =>
+            {
+                return (t) => MessageBox.Show(
+                    t,
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            });
+            SimpleIoc.Default.Register<ShowSelectBox>(() =>
+            {
+                return vm =>
+                {
+                    var dialog = new SelectBoxDialog();
+                    dialog.DataContext = vm;
+                    vm.window = dialog;
+                    dialog.ShowDialog();
+                    return vm.SelectedItem;
+                };
+            });
 
             // services
             SimpleIoc.Default.Register<IAssemblyInfoService, AssemblyInfoService>();
@@ -36,24 +94,12 @@ namespace View
             });
         }
 
-        public MainViewModel MainViewModel
-        {
-            get => SimpleIoc.Default.GetInstance<MainViewModel>();
-        }
+        public MainViewModel MainViewModel => SimpleIoc.Default.GetInstance<MainViewModel>();
 
-        public MenuViewModel MenuViewModel
-        {
-            get => SimpleIoc.Default.GetInstance<MenuViewModel>();
-        }
+        public MenuViewModel MenuViewModel => SimpleIoc.Default.GetInstance<MenuViewModel>();
 
-        public NavigationViewModel NavigationViewModel
-        {
-            get => SimpleIoc.Default.GetInstance<NavigationViewModel>();
-        }
+        public NavigationViewModel NavigationViewModel => SimpleIoc.Default.GetInstance<NavigationViewModel>();
 
-        public ProjectSelectDialogViewModel ProjectSelectDialogViewModel
-        {
-            get => SimpleIoc.Default.GetInstance<ProjectSelectDialogViewModel>();
-        }
+        public ProjectSelectDialogViewModel ProjectSelectDialogViewModel => SimpleIoc.Default.GetInstance<ProjectSelectDialogViewModel>();
     }
 }

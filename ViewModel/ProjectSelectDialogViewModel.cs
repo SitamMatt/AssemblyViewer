@@ -17,6 +17,8 @@ namespace ViewModel
 
         public ObservableCollection<Project> Projects => _projectsService.Projects;
 
+        public IWindow window;
+
         public Project SelectedItem
         {
             get => _selectedItem;
@@ -24,6 +26,7 @@ namespace ViewModel
             {
                 _selectedItem = value;
                 RaisePropertyChanged(nameof(SelectedItem));
+                if (_selectedItem != null) window?.Close();
             }
         }
     }

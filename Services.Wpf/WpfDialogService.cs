@@ -44,7 +44,6 @@ namespace Services.Wpf
             {
                 Title = title,
                 Filter = filter,
-                CheckFileExists = true
             };
             var result = dialog.ShowDialog();
             return result == true ? dialog.FileName : null;
