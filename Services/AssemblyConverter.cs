@@ -13,6 +13,7 @@ namespace Services
         protected Dictionary<Type, TypeInfo> typesLookup = new Dictionary<Type, TypeInfo>();
         protected Dictionary<Guid, AsmComponent> localNodesLookup = new Dictionary<Guid, AsmComponent>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
+        protected Dictionary<System.Reflection.ConstructorInfo, ConstructorInfo> constructorsLookup = new();
         protected System.Reflection.Assembly localAssembly;
 
 
@@ -76,6 +77,7 @@ namespace Services
                 Guid = Guid.NewGuid()
             };
             localNodesLookup[info.Guid] = info;
+            constructorsLookup[constructor] = info;
             info.Attributes = constructor.Attributes;
             info.Parameters = constructor.GetParameters().Select(ConvertParameter).ToList();
             info.CustomAttributes = constructor.CustomAttributes.Select(ConvertAttribute).ToList();
@@ -150,13 +152,21 @@ namespace Services
         public AttributeInfo ConvertAttribute(System.Reflection.CustomAttributeData attribute)
         {
             if (attribute.AttributeType.Assembly != localAssembly) return new AttributeInfo { Name = attribute.AttributeType.Name };
+            var type = ConvertType(attribute.AttributeType);
+            var constructor = constructorsLookup[attribute.Constructor];
             var info = new AttributeInfo
             {
                 Name = attribute.AttributeType.Name,
-                Type = ConvertType(attribute.AttributeType),
-                ConstructorInfo = ConvertConstructor(attribute.Constructor),
+                Type = type,
+                ConstructorInfo = constructor,
                 Guid = Guid.NewGuid()
             };
+            info.Arguments = attribute.NamedArguments
+                .Select(a => KeyValuePair.Create(a.MemberName, a.TypedValue.ToString()))
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            info.ConstructorArguments = attribute.ConstructorArguments
+                .Select(a => a.Value.ToString())
+                .ToList();
             localNodesLookup[info.Guid] = info;
             return info;
         }

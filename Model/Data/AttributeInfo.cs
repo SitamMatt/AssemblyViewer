@@ -11,6 +11,8 @@ namespace Model.Data
     {
         public TypeInfo Type { get; set; }
         public ConstructorInfo ConstructorInfo { get; set; }
+        public Dictionary<string, string> Arguments { get; set; }
+        public List<string> ConstructorArguments { get; set; }
         public override object Accept(IVisitor visitor)
         {
             return visitor.Handle(this);

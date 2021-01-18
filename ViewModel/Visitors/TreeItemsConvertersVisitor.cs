@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Common.Extensions;
@@ -42,6 +43,19 @@ namespace ViewModel.Visitors
                     item.Accept(_treeItemConverter) as TreeNode
                     );
             }
+            return category;
+        }
+
+        public TreeNode CreateCategory(string name, IEnumerable<string> items)
+        {
+            if (EnumerableExtensions.IsEmpty(items)) return null;
+            var category = new TreeNode
+            {
+                Name = name,
+                Children = new ObservableCollection<TreeNode>(
+                    items.Select(x => new TreeNode { Name = x})
+                    )
+            };
             return category;
         }
 
@@ -176,7 +190,6 @@ namespace ViewModel.Visitors
                 .GroupBy(t => t.Namespace)
                 .Select(g => CreateCategory(g.Key, g.AsEnumerable()))
                 .ForEach(children.AddIfNotNull);
-            //children.AddIfNotNull(CreateCategory("Defined Types", info.Types));
             Result = children;
             return children;
         }
@@ -185,11 +198,9 @@ namespace ViewModel.Visitors
         {
             var children = new ObservableCollection<TreeNode>();
             children.AddIfNotNull(CreateCategory("Type", info.Type));
-            //info.Type.Accept(_treeItemConverter);
-            //children.Add(_treeItemConverter.Result);
-            children.AddIfNotNull(CreateCategory("Constructor", info.ConstructorInfo));
-            //info.ConstructorInfo.Accept(_treeItemConverter);
-            //children.Add(_treeItemConverter.Result);
+            var constructorName = $"Constructor({string.Join(", ", info.ConstructorArguments)})";
+            children.AddIfNotNull(CreateCategory(constructorName, info.ConstructorInfo));
+            children.AddIfNotNull(CreateCategory("Arguments", info.Arguments.Select(x => x.ToString())));
             Result = children;
             return children;
         }
