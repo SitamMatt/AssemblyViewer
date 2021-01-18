@@ -14,9 +14,9 @@ namespace Model.Data
         //public MethodInfo GetMethod { get; set; }
         public TypeInfo Type { get; set; }
 
-        public override void Accept(IVisitor visitor)
+        public override object Accept(IVisitor visitor)
         {
-            visitor.Handle(this);
+            return visitor.Handle(this);
         }
     }
 }

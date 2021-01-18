@@ -5,9 +5,9 @@ namespace Model.Data
     public class MethodInfo : MethodBaseInfo
     {
         public TypeInfo ReturnType { get; set; }
-        public override void Accept(IVisitor visitor)
+        public override object Accept(IVisitor visitor)
         {
-            visitor.Handle(this);
+            return visitor.Handle(this);
         }
     }
 }

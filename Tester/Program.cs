@@ -16,6 +16,7 @@ namespace Tester
         public int Prop { get; set; }
         public int ReadProp { get; }
 
+        [Obsolete("Deprecated Method", false)]
         public void Method(int arg1) { }
         
         static void Main(string[] args)
@@ -24,6 +25,8 @@ namespace Tester
             System.Reflection.PropertyInfo[] props = typeof(Program).GetProperties();
             var p = props[0];
             var p1 = props[1];
+            var a = typeof(Program);
+            System.Collections.Generic.IEnumerable<CustomAttributeData> attrs = a.CustomAttributes;
             //var info = new Converter().Convert(asm);
             //IExtendedXmlSerializer serializer = new ConfigurationContainer()
             //    .UseAutoFormatting()

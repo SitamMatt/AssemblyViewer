@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Model.VisitorPattern;
 
 namespace Model.Data
@@ -10,9 +11,11 @@ namespace Model.Data
         public virtual Dictionary<Guid, AsmComponent> Lookup { get; set; }
         public List<ModuleInfo> Modules { get; set; }
 
-        public override void Accept(IVisitor visitor)
+        public List<AsmComponent> LocalNodes { get; set; }
+
+        public override object Accept(IVisitor visitor)
         {
-            visitor.Handle(this);
+            return visitor.Handle(this);
         }
     }
 }

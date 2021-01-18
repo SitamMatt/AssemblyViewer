@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Model.VisitorPattern;
 
 namespace Model.Data
@@ -7,6 +8,7 @@ namespace Model.Data
     {
         public virtual Guid Guid { get; set; }
         public string Name { get; set; }
-        public abstract void Accept(IVisitor visitor);
+        public List<AttributeInfo> CustomAttributes { get; set; }
+        public abstract object Accept(IVisitor visitor);
     }
 }

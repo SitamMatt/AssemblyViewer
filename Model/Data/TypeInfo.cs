@@ -12,9 +12,9 @@ namespace Model.Data
         public List<MethodInfo> Methods { get; set; }
         public List<PropertyInfo> Properties { get; set; }
         public List<TypeInfo> NestedTypes { get; set; }
-        public override void Accept(IVisitor visitor)
+        public override object Accept(IVisitor visitor)
         {
-            visitor.Handle(this);
+            return visitor.Handle(this);
         }
     }
 }

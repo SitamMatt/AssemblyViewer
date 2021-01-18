@@ -1,13 +1,16 @@
 ﻿using Model.VisitorPattern;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Model.Data
 {
-    public class ParameterInfo : AsmComponent
+    public class AttributeInfo : AsmComponent
     {
         public TypeInfo Type { get; set; }
-        public ParameterAttributes Attributes { get; set; }
-
+        public ConstructorInfo ConstructorInfo { get; set; }
         public override object Accept(IVisitor visitor)
         {
             return visitor.Handle(this);
