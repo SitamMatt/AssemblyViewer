@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Common.Extensions;
 using Model.Data;
-using Model.VisitorPattern;
 using ViewModel.Data;
 
 namespace ViewModel.Visitors
@@ -31,7 +30,7 @@ namespace ViewModel.Visitors
 
         public TreeNode CreateCategory(string name, IEnumerable<AsmComponent> items)
         {
-            if (items.IsEmpty()) return null;
+            if (EnumerableExtensions.IsEmpty(items)) return null;
             var category = new TreeNode
             {
                 Name = name,
@@ -173,7 +172,11 @@ namespace ViewModel.Visitors
         public object Handle(ModuleInfo info)
         {
             var children = new ObservableCollection<TreeNode>();
-            children.AddIfNotNull(CreateCategory("Defined Types", info.Types));
+            info.Types
+                .GroupBy(t => t.Namespace)
+                .Select(g => CreateCategory(g.Key, g.AsEnumerable()))
+                .ForEach(children.AddIfNotNull);
+            //children.AddIfNotNull(CreateCategory("Defined Types", info.Types));
             Result = children;
             return children;
         }

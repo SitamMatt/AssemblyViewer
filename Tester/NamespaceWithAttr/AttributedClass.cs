@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Tester
+namespace Tester.NamespaceWithAttr
 {
     [Serializable]
     public class AttributedClass
