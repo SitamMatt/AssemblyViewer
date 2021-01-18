@@ -13,7 +13,6 @@ namespace Services
         protected Dictionary<Type, TypeInfo> typesLookup = new Dictionary<Type, TypeInfo>();
         protected Dictionary<Guid, AsmComponent> localNodesLookup = new Dictionary<Guid, AsmComponent>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
-        protected List<AsmComponent> localNodes = new List<AsmComponent>();
         protected System.Reflection.Assembly localAssembly;
 
 
@@ -29,7 +28,6 @@ namespace Services
             };
             localNodesLookup[info.Guid] = info;
             info.CustomAttributes = assembly.CustomAttributes.Select(ConvertAttribute).ToList();
-            info.LocalNodes = localNodes;
             return info;
         }
 
@@ -46,32 +44,6 @@ namespace Services
             return info;
         }
 
-        public TypeInfo ConvertTypeForeign(Type type)
-        {
-            if (typesLookup.ContainsKey(type)) return typesLookup[type];
-            var info = new TypeInfo
-            {
-                Name = type.Name,
-                Guid = Guid.NewGuid()
-            };
-            typesLookup[type] = info;
-            localNodesLookup[info.Guid] = info;
-            localNodes.Add(info);
-            info.Attributes = type.Attributes;
-            info.Fields = type.GetFields().Select(ConvertField).ToList();
-            localNodes.AddRange(info.Fields);
-            info.Properties = type.GetProperties().Select(ConvertProperty).ToList();
-            localNodes.AddRange(info.Properties);
-            info.Methods = type.GetMethods().Select(ConvertMethod).ToList();
-            localNodes.AddRange(info.Methods);
-            info.Constructors = type.GetConstructors().Select(ConvertConstructor).ToList();
-            localNodes.AddRange(info.Constructors);
-            info.CustomAttributes = type.CustomAttributes.Select(ConvertAttribute).ToList();
-            info.NestedTypes = type.GetNestedTypes().Select(ConvertType).ToList();
-            localNodes.AddRange(info.NestedTypes);
-            return info;
-        }
-
         public TypeInfo ConvertType(Type type)
         {
             if (typesLookup.ContainsKey(type)) return typesLookup[type];
@@ -84,6 +56,7 @@ namespace Services
             typesLookup[type] = info;
             localNodesLookup[info.Guid] = info;
             info.Attributes = type.Attributes;
+            info.Namespace = type.Namespace;
             info.Fields = type.GetFields().Select(ConvertField).ToList();
             info.Properties = type.GetProperties().Select(ConvertProperty).ToList();
             info.Methods = type.GetMethods().Select(ConvertMethod).ToList();

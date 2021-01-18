@@ -11,8 +11,6 @@ namespace Model.Data
         public virtual Dictionary<Guid, AsmComponent> Lookup { get; set; }
         public List<ModuleInfo> Modules { get; set; }
 
-        public List<AsmComponent> LocalNodes { get; set; }
-
         public override object Accept(IVisitor visitor)
         {
             return visitor.Handle(this);
