@@ -22,7 +22,7 @@ The application to view the content of the clr libray
 ## 1st Stage
 
 - [x] Menu bar with logic
-- [ ] Data classes for assebly info
+- [x] Data classes for assebly info
 - [x] Converting assembly content
 - [x] Treeview representation of assembly
 
