@@ -57,7 +57,7 @@ namespace ViewModel.Tests
             _mock.Verify(x => x.Handle(It.IsAny<ModuleInfo>()), Times.Never);
             _mock.Verify(x => x.Handle(It.IsAny<TypeInfo>()), Times.Never);
             _mock.Verify(x => x.Handle(It.IsAny<FieldInfo>()), Times.Once);
-            Assert.AreEqual(1, vis.Result.Count);
+            Assert.AreEqual(2, vis.Result.Count);
         }
         
         [Test]
@@ -69,7 +69,7 @@ namespace ViewModel.Tests
             _mock.Verify(x => x.Handle(It.IsAny<ModuleInfo>()), Times.Never);
             _mock.Verify(x => x.Handle(It.IsAny<TypeInfo>()), Times.Once);
             _mock.Verify(x => x.Handle(It.IsAny<FieldInfo>()), Times.Never);
-            Assert.AreEqual(1, vis.Result.Count);
+            Assert.AreEqual(2, vis.Result.Count);
         }
     }
 }
