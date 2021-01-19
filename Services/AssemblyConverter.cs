@@ -14,7 +14,7 @@ namespace Services
         protected Dictionary<Guid, AsmComponent> localNodesLookup = new Dictionary<Guid, AsmComponent>();
         protected Dictionary<Guid, AsmComponent> nodesLookup = new Dictionary<Guid, AsmComponent>();
         protected Dictionary<System.Reflection.ConstructorInfo, ConstructorInfo> constructorsLookup = new();
-        protected System.Reflection.Assembly localAssembly;
+        public System.Reflection.Assembly localAssembly;
 
 
         public AssemblyInfo Convert(System.Reflection.Assembly assembly)

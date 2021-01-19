@@ -73,6 +73,7 @@ namespace Tester
         public void ModuleConversionTest()
         {
             var converter = new AssemblyConverter();
+            converter.localAssembly = assembly;
             var modules = assembly.GetModules();
             Assert.AreEqual(1, modules.Length);
             var module = converter.ConvertModule(modules[0]);
@@ -90,6 +91,7 @@ namespace Tester
         public void TypeConversionTest()
         {
             var converter = new AssemblyConverter();
+            converter.localAssembly = assembly;
             var typeA =converter.ConvertType(assembly.GetModules()[0].GetTypes()[0]);
             var typeB = converter.ConvertType(assembly.GetModules()[0].GetTypes()[1]);
             Assert.AreEqual("A", typeA.Name);
