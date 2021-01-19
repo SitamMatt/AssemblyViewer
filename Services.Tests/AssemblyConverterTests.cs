@@ -61,8 +61,8 @@ namespace Tester
             Assert.AreEqual(2, assemblyInfo.Modules[0].Types.Count);
             var typeA = assemblyInfo.Modules[0].Types[0];
             var typeB = assemblyInfo.Modules[0].Types[1];
-            Assert.AreEqual("Tester.A", typeA.Name);
-            Assert.AreEqual("Tester.B", typeB.Name);
+            Assert.AreEqual("A", typeA.Name);
+            Assert.AreEqual("B", typeB.Name);
             Assert.AreEqual(typeB, typeA.Fields[0].Type);
             Assert.AreEqual(typeA, typeA.Fields[0].DeclaringType);
             Assert.AreEqual(typeA, typeB.Fields[0].Type);
@@ -78,8 +78,8 @@ namespace Tester
             var module = converter.ConvertModule(modules[0]);
             var typeA = module.Types[0];
             var typeB = module.Types[1];
-            Assert.AreEqual("Tester.A", typeA.Name);
-            Assert.AreEqual("Tester.B", typeB.Name);
+            Assert.AreEqual("A", typeA.Name);
+            Assert.AreEqual("B", typeB.Name);
             Assert.AreEqual(typeB, typeA.Fields[0].Type);
             Assert.AreEqual(typeA, typeA.Fields[0].DeclaringType);
             Assert.AreEqual(typeA, typeB.Fields[0].Type);
@@ -92,8 +92,8 @@ namespace Tester
             var converter = new AssemblyConverter();
             var typeA =converter.ConvertType(assembly.GetModules()[0].GetTypes()[0]);
             var typeB = converter.ConvertType(assembly.GetModules()[0].GetTypes()[1]);
-            Assert.AreEqual("Tester.A", typeA.Name);
-            Assert.AreEqual("Tester.B", typeB.Name);
+            Assert.AreEqual("A", typeA.Name);
+            Assert.AreEqual("B", typeB.Name);
             Assert.AreEqual(typeB, typeA.Fields[0].Type);
             Assert.AreEqual(typeA, typeA.Fields[0].DeclaringType);
             Assert.AreEqual(typeA, typeB.Fields[0].Type);
