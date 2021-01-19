@@ -96,8 +96,6 @@ namespace Tester
             Assert.AreEqual(true, vm.OpenCommand.CanExecute(null));
 
             vm.OpenCommand.Execute(null);
-
-            //dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             
             Mock.Get(filesystemMock).Verify(
                 x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
@@ -129,8 +127,6 @@ namespace Tester
             vm.ExportXmlCommand.Execute(null);
 
             projectServiceMock.Verify(x => x.Projects);
-
-            //dialogServiceMock.Verify(x => x.ShowWarning(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -193,10 +189,6 @@ namespace Tester
 
             projectServiceMock.Verify(x => x.Projects);
 
-            //dialogServiceMock.Verify(x => x.ShowDialog(It.IsAny<ProjectSelectDialogViewModel>()), Times.Once);
-
-            //dialogServiceMock.Verify(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-
             Mock.Get(filesystemMock).Verify(
                 x => x.File.Open(It.Is<string>(y => y == @"F:\file.xml"), It.Is<FileMode>(y => y == FileMode.Create)),
                 Times.Once);
@@ -240,8 +232,6 @@ namespace Tester
             Assert.AreEqual(true, vm.ImportXmlCommand.CanExecute(null));
 
             vm.ImportXmlCommand.Execute(null);
-
-            //dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             Mock.Get(filesystemMock).Verify(
                 x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
