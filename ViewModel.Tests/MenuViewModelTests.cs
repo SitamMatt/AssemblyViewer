@@ -56,7 +56,7 @@ namespace Tester
         public void ExitCommandTest()
         {
             var lifetimeMock = new Mock<ILifetimeService>();
-            var vm = new MenuViewModel(null, null, lifetimeMock.Object, null, null);
+            var vm = new MenuViewModel(null, lifetimeMock.Object, null, null);
             Assert.AreEqual(true, vm.ExitCommand.CanExecute(null));
             vm.ExitCommand.Execute(null);
             lifetimeMock.Verify(x => x.Exit(It.Is<int>(y => y == 0)));
@@ -87,7 +87,7 @@ namespace Tester
                 .Returns(assemblyStream);
 
 
-            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, assemblyConverterFactoryMock.Object);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, assemblyConverterFactoryMock.Object);
             
             Assert.AreEqual(true, vm.OpenCommand.CanExecute(null));
 
@@ -116,7 +116,7 @@ namespace Tester
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>());
 
-            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null);
 
             Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
 
@@ -168,7 +168,7 @@ namespace Tester
                 .Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
                 .Returns(assemblyStream);
 
-            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null);
 
             Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
 
@@ -215,7 +215,7 @@ namespace Tester
                 .Returns(assemblyStream);
 
 
-            var vm = new MenuViewModel(projectServiceMock.Object, dialogServiceMock.Object, null, filesystemMock, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null);
 
             Assert.AreEqual(true, vm.ImportXmlCommand.CanExecute(null));
 

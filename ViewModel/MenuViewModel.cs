@@ -13,18 +13,16 @@ namespace ViewModel
     public class MenuViewModel : ViewModelBase
     {
         private readonly IProjectsService projectService;
-        private readonly IDialogService dialogService;
         private readonly ILifetimeService lifetimeService;
         private readonly IFileSystem fileSystem;
         private readonly IAssemblyConverterFactory assemblyConverterFactory;
 
-        public MenuViewModel(IProjectsService projectsService, IDialogService dialogService,
+        public MenuViewModel(IProjectsService projectsService,
             ILifetimeService lifetimeService, IFileSystem fileSystem,
             IAssemblyConverterFactory assemblyConverterFactory, SaveFile saveFileDelegate, Warn warnDelegate, Inform informDelegate, OpenFile openFileDelegate,
             ShowSelectBox showSelectBoxDelegate)
         {
             this.projectService = projectsService;
-            this.dialogService = dialogService;
             this.lifetimeService = lifetimeService;
             this.fileSystem = fileSystem;
             this.assemblyConverterFactory = assemblyConverterFactory;
