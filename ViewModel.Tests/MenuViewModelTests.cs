@@ -117,12 +117,12 @@ namespace Tester
             var fileMock = Mock.Of<IFile>();
             var projectServiceMock = new Mock<IProjectsService>();
 
-            var informMock = new Mock<Warn>();
+            var warnMock = new Mock<Warn>();
 
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>());
 
-            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, null, null, null, null, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, null, warnMock.Object.Invoke, null, null, null);
 
             Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
 
@@ -141,7 +141,6 @@ namespace Tester
             var fileMock = Mock.Of<IFile>();
             var projectServiceMock = new Mock<IProjectsService>();
 
-            var warneMock = new Mock<Warn>();
 
             var saveFileMock = new Mock<SaveFile>();
             var b = new SaveFile((x, y) => @"F:\file.xml");
@@ -185,7 +184,7 @@ namespace Tester
                 .Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
                 .Returns(assemblyStream);
 
-            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, b, warneMock.Object.Invoke,
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, b, null,
                 informMock.Object.Invoke, null, d);
 
             Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
