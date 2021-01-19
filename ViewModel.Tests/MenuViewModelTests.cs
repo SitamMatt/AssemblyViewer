@@ -71,12 +71,16 @@ namespace Tester
             var projectServiceMock = new Mock<IProjectsService>();
             var assemblyConverterFactoryMock = new Mock<IAssemblyConverterFactory>();
 
+            var openFileMock = new Mock<OpenFile>();
+
             dialogServiceMock.Setup(
                 x => x.OpenFile(
                     It.IsAny<string>(),
                     It.IsAny<string>())
                 )
                 .Returns(@"F:\file.dll");
+
+            var a = new OpenFile((x, y) => @"F:\file.dll");
 
             Mock.Get(filesystemMock)
                 .Setup(x => x.File)
@@ -87,13 +91,13 @@ namespace Tester
                 .Returns(assemblyStream);
 
 
-            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, assemblyConverterFactoryMock.Object, null, null, null, null, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, assemblyConverterFactoryMock.Object, null, null, null, a, null);
             
             Assert.AreEqual(true, vm.OpenCommand.CanExecute(null));
 
             vm.OpenCommand.Execute(null);
 
-            dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            //dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             
             Mock.Get(filesystemMock).Verify(
                 x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
@@ -113,6 +117,8 @@ namespace Tester
             var fileMock = Mock.Of<IFile>();
             var projectServiceMock = new Mock<IProjectsService>();
 
+            var informMock = new Mock<Warn>();
+
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>());
 
@@ -124,7 +130,7 @@ namespace Tester
 
             projectServiceMock.Verify(x => x.Projects);
 
-            dialogServiceMock.Verify(x => x.ShowWarning(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            //dialogServiceMock.Verify(x => x.ShowWarning(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -135,10 +141,21 @@ namespace Tester
             var fileMock = Mock.Of<IFile>();
             var projectServiceMock = new Mock<IProjectsService>();
 
+            var warneMock = new Mock<Warn>();
+
+            var saveFileMock = new Mock<SaveFile>();
+            var b = new SaveFile((x, y) => @"F:\file.xml");
+
+
             Project project = new Project
             {
                 Guid = Guid.Parse("199d0520-758b-4cf4-ab6a-4484d0b6fc0a")
             };
+
+            var informMock = new Mock<Inform>();
+
+            var showSelectBoxMock = new Mock<ShowSelectBox>();
+            var d = new ShowSelectBox(x => project);
 
             projectServiceMock.Setup(x => x.Projects)
                 .Returns(new ObservableCollection<Project>() { project });
@@ -168,7 +185,8 @@ namespace Tester
                 .Setup(x => x.Open(It.IsAny<string>(), It.IsAny<FileMode>()))
                 .Returns(assemblyStream);
 
-            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, null, null, null, null, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, b, warneMock.Object.Invoke,
+                informMock.Object.Invoke, null, d);
 
             Assert.AreEqual(true, vm.ExportXmlCommand.CanExecute(null));
 
@@ -176,9 +194,9 @@ namespace Tester
 
             projectServiceMock.Verify(x => x.Projects);
 
-            dialogServiceMock.Verify(x => x.ShowDialog(It.IsAny<ProjectSelectDialogViewModel>()), Times.Once);
+            //dialogServiceMock.Verify(x => x.ShowDialog(It.IsAny<ProjectSelectDialogViewModel>()), Times.Once);
 
-            dialogServiceMock.Verify(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            //dialogServiceMock.Verify(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             Mock.Get(filesystemMock).Verify(
                 x => x.File.Open(It.Is<string>(y => y == @"F:\file.xml"), It.Is<FileMode>(y => y == FileMode.Create)),
@@ -199,6 +217,9 @@ namespace Tester
             var fileMock = Mock.Of<IFile>();
             var projectServiceMock = new Mock<IProjectsService>();
 
+            var openFileMock = new Mock<OpenFile>();
+            var a = new OpenFile((x, y) => @"F:\file.dll");
+
             dialogServiceMock.Setup(
                 x => x.OpenFile(
                     It.IsAny<string>(),
@@ -215,13 +236,13 @@ namespace Tester
                 .Returns(assemblyStream);
 
 
-            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, null, null, null, null, null);
+            var vm = new MenuViewModel(projectServiceMock.Object, null, filesystemMock, null, null, null, null, a, null);
 
             Assert.AreEqual(true, vm.ImportXmlCommand.CanExecute(null));
 
             vm.ImportXmlCommand.Execute(null);
 
-            dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            //dialogServiceMock.Verify(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             Mock.Get(filesystemMock).Verify(
                 x => x.File.OpenRead(It.Is<string>(y => y == @"F:\file.dll")),
